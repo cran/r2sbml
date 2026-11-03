@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Limitations and unimplemented behaviour</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Limitations and unimplemented
+behaviour</h1>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#the-single-most-important-table" id="toc-the-single-most-important-table">The single most important
+table</a></li>
+<li><a href="#how-far-the-output-has-been-checked" id="toc-how-far-the-output-has-been-checked">How far the output has been
+checked</a></li>
+<li><a href="#scope-reading-and-exporting-only" id="toc-scope-reading-and-exporting-only">Scope: reading and exporting
+only</a></li>
+<li><a href="#per-target-capability-matrix" id="toc-per-target-capability-matrix">Per-target capability
+matrix</a></li>
+<li><a href="#algebraic-rules" id="toc-algebraic-rules">Algebraic
+rules</a>
+<ul>
+<li><a href="#rules-linear-in-one-unknown-become-assignments" id="toc-rules-linear-in-one-unknown-become-assignments">Rules linear in
+one unknown become assignments</a></li>
+<li><a href="#coupled-or-nonlinear-rules-become-a-dae-where-the-target-can-solve-one" id="toc-coupled-or-nonlinear-rules-become-a-dae-where-the-target-can-solve-one">Coupled
+or nonlinear rules become a DAE where the target can solve one</a></li>
+<li><a href="#the-dae-path-has-three-further-limits" id="toc-the-dae-path-has-three-further-limits">The DAE path has three
+further limits</a></li>
+</ul></li>
+<li><a href="#compartments-whose-volume-changes" id="toc-compartments-whose-volume-changes">Compartments whose volume
+changes</a></li>
+<li><a href="#delay" id="toc-delay"><code>delay</code></a></li>
+<li><a href="#events" id="toc-events">Events</a></li>
+<li><a href="#mathematics" id="toc-mathematics">Mathematics</a></li>
+<li><a href="#values-and-names" id="toc-values-and-names">Values and
+names</a>
+<ul>
+<li><a href="#values-the-model-leaves-undefined" id="toc-values-the-model-leaves-undefined">Values the model leaves
+undefined</a></li>
+<li><a href="#ids-the-target-reserves" id="toc-ids-the-target-reserves">Ids the target reserves</a></li>
+</ul></li>
+<li><a href="#no-validation-is-performed" id="toc-no-validation-is-performed">No validation is performed</a></li>
+<li><a href="#quirks-of-the-query-functions" id="toc-quirks-of-the-query-functions">Quirks of the query functions</a>
+<ul>
+<li><a href="#initial-values-are-reported-as-the-file-states-them" id="toc-initial-values-are-reported-as-the-file-states-them">Initial
+values are reported as the file states them</a></li>
+<li><a href="#names-fall-back-to-the-id" id="toc-names-fall-back-to-the-id">Names fall back to the id</a></li>
+<li><a href="#absent-components-raise-an-error" id="toc-absent-components-raise-an-error">Absent components raise an
+error</a></li>
+</ul></li>
+<li><a href="#things-that-are-correct-but-easy-to-misread" id="toc-things-that-are-correct-but-easy-to-misread">Things that are
+correct but easy to misread</a></li>
+<li><a href="#generated-code-is-a-starting-point" id="toc-generated-code-is-a-starting-point">Generated code is a starting
+point</a></li>
+<li><a href="#the-sbml-test-suite-cases-that-still-fail" id="toc-the-sbml-test-suite-cases-that-still-fail">The SBML Test Suite
+cases that still fail</a></li>
+<li><a href="#where-these-are-tracked" id="toc-where-these-are-tracked">Where these are tracked</a></li>
+</ul>
+</div>
+
+<p>This vignette is the honest inventory: what <code>r2sbml</code> does
+not do, what it does only partially, and — the part that matters most in
+practice — <strong>which of those gaps announce themselves and which do
+not</strong>.</p>
+<p>Read <code>vignette(&quot;r2sbml&quot;, package = &quot;r2sbml&quot;)</code> first for
+how the package is meant to be used.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(r2sbml)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>ex <span class="ot">&lt;-</span> <span class="cf">function</span>(f) <span class="fu">system.file</span>(<span class="st">&quot;examples&quot;</span>, f, <span class="at">package =</span> <span class="st">&quot;r2sbml&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="co"># convertReactions() reports progress on the console; keep only the warnings</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>convert <span class="ot">&lt;-</span> <span class="cf">function</span>(file, <span class="at">format =</span> <span class="st">&quot;R&quot;</span>, <span class="at">out =</span> <span class="fu">tempfile</span>()) {</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>  <span class="fu">tryCatch</span>({</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>    <span class="fu">invisible</span>(<span class="fu">capture.output</span>(<span class="fu">convertReactions</span>(file, out, <span class="at">format =</span> format)))</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">&quot;no warning</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>  }, <span class="at">warning =</span> <span class="cf">function</span>(w) <span class="fu">cat</span>(<span class="fu">conditionMessage</span>(w), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>))</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>  <span class="fu">invisible</span>(out)</span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>}</span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>sbml_file <span class="ot">&lt;-</span> <span class="cf">function</span>(body) {</span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>  f <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">&quot;.xml&quot;</span>)</span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a>  <span class="fu">writeLines</span>(<span class="fu">sprintf</span>(<span class="st">&#39;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;</span></span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a><span class="st">&lt;sbml xmlns=&quot;http://www.sbml.org/sbml/level3/version2/core&quot; level=&quot;3&quot; version=&quot;2&quot;&gt;</span></span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a><span class="st">&lt;model&gt;%s&lt;/model&gt;</span></span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a><span class="st">&lt;/sbml&gt;&#39;</span>, body), f)</span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a>  f</span>
+<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a>}</span></code></pre></div>
+<div id="the-single-most-important-table" class="section level1">
+<h1>The single most important table</h1>
+<p>Generated code that fails loudly is a nuisance. Generated code that
+runs and quietly returns the wrong numbers is a hazard. Here is where
+each limitation falls:</p>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Limitation</th>
+<th>How you find out</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Coupled or nonlinear algebraic rules in mrgsolve / rxode2 /
+ubiquity</td>
+<td><strong>R warning</strong> + comment in the file</td>
+</tr>
+<tr class="even">
+<td>Coupled or nonlinear algebraic rules that do not form a square
+system</td>
+<td><strong>R warning</strong> + comment</td>
+</tr>
+<tr class="odd">
+<td>Dilution for an assignment-rule volume that cannot be
+differentiated</td>
+<td><strong>R warning</strong></td>
+</tr>
+<tr class="even">
+<td>A value the model leaves undefined</td>
+<td><strong>R warning</strong>, written as <code>NaN</code></td>
+</tr>
+<tr class="odd">
+<td>Constructs with no ubiquity spelling</td>
+<td><strong>R warning</strong> + <code># WARNING</code> block in the
+file</td>
+</tr>
+<tr class="even">
+<td>An id renamed because the target reserves it</td>
+<td>console message</td>
+</tr>
+<tr class="odd">
+<td><code>delay</code> in the other five targets</td>
+<td><strong>silent</strong> — code fails at run time</td>
+</tr>
+<tr class="even">
+<td><code>root(n, x)</code> of a negative <code>x</code>, <code>n</code>
+not a literal</td>
+<td><strong>silent</strong> — <code>NaN</code>, even for an odd
+<code>n</code></td>
+</tr>
+<tr class="odd">
+<td>Events</td>
+<td><strong>silent</strong> — a count in the header comment only</td>
+</tr>
+<tr class="even">
+<td><code>factorial</code> in C++ and Julia</td>
+<td><strong>silent</strong> — untested</td>
+</tr>
+<tr class="odd">
+<td>Inconsistent initial conditions for a DAE</td>
+<td>solver error, not mentioning SBML</td>
+</tr>
+<tr class="even">
+<td>A semantically invalid model</td>
+<td><strong>silent</strong> — nothing is validated</td>
+</tr>
+</tbody>
+</table>
+<p>Everything below expands on these.</p>
+</div>
+<div id="how-far-the-output-has-been-checked" class="section level1">
+<h1>How far the output has been checked</h1>
+<p>The deSolve output is checked numerically against the <a href="https://github.com/sbmlteam/sbml-test-suite">SBML Test Suite</a>:
+each case is converted, simulated and compared with the suite’s expected
+time course within the case’s own tolerances. Of the 1011 semantic cases
+in scope, <strong>1007 pass</strong>. “In scope” leaves out every case
+using a construct <code>r2sbml</code> does not translate: events,
+<code>delay</code>, <code>rateOf</code>, fast reactions,
+<code>stoichiometryMath</code> and the SBML Level 3 packages. The four
+that fail in scope are listed at the end.</p>
+<p>The other five targets share the same model preparation and the same
+expression rewriting, so most of what the suite checks applies to them
+too — but they are verified only on purpose-built probe models, against
+closed-form solutions: mrgsolve and rxode2 compiled and run, MATLAB
+under Octave, Julia with <code>DifferentialEquations.jl</code>, and
+ubiquity built with <code>build_system()</code> and run on both its C
+and R engines. None of them is run against the full suite.</p>
+</div>
+<div id="scope-reading-and-exporting-only" class="section level1">
+<h1>Scope: reading and exporting only</h1>
+<p><code>r2sbml</code> has no setter API. You cannot change a species’
+initial value, add a reaction, or write SBML back out. There is no
+<code>setSpecies()</code>, no <code>writeSBML()</code>, and
+<code>getModel()</code> returns an opaque external pointer rather than
+an R-side object you could edit.</p>
+<p>If you need to modify models programmatically, use libSBML’s own R
+bindings or edit the XML directly. <code>r2sbml</code> is for inspecting
+a model and getting simulation code out of it.</p>
+</div>
+<div id="per-target-capability-matrix" class="section level1">
+<h1>Per-target capability matrix</h1>
+<table style="width:100%;">
+<colgroup>
+<col width="14%" />
+<col width="14%" />
+<col width="14%" />
+<col width="14%" />
+<col width="14%" />
+<col width="14%" />
+<col width="14%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Feature</th>
+<th align="center">deSolve</th>
+<th align="center">mrgsolve</th>
+<th align="center">rxode2</th>
+<th align="center">MATLAB</th>
+<th align="center">Julia</th>
+<th align="center">ubiquity</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Rate rules / reactions</td>
+<td align="center">yes</td>
+<td align="center">yes</td>
+<td align="center">yes</td>
+<td align="center">yes</td>
+<td align="center">yes</td>
+<td align="center">yes</td>
+</tr>
+<tr class="even">
+<td>Assignment rules, returned as outputs</td>
+<td align="center">yes</td>
+<td align="center">yes</td>
+<td align="center">yes</td>
+<td align="center">yes</td>
+<td align="center">yes</td>
+<td align="center">yes</td>
+</tr>
+<tr class="odd">
+<td>Boundary / constant species</td>
+<td align="center">yes</td>
+<td align="center">yes</td>
+<td align="center">yes</td>
+<td align="center">yes</td>
+<td align="center">yes</td>
+<td align="center">yes</td>
+</tr>
+<tr class="even">
+<td>Initial-condition unit conversion</td>
+<td align="center">yes</td>
+<td align="center">yes</td>
+<td align="center">yes</td>
+<td align="center">yes</td>
+<td align="center">yes</td>
+<td align="center">yes</td>
+</tr>
+<tr class="odd">
+<td>Algebraic rules linear in one unknown</td>
+<td align="center">yes</td>
+<td align="center">yes</td>
+<td align="center">yes</td>
+<td align="center">yes</td>
+<td align="center">yes</td>
+<td align="center">yes</td>
+</tr>
+<tr class="even">
+<td>Coupled or nonlinear algebraic rules (DAE)</td>
+<td align="center">yes</td>
+<td align="center">no</td>
+<td align="center">no</td>
+<td align="center">yes</td>
+<td align="center">yes</td>
+<td align="center">no</td>
+</tr>
+<tr class="odd">
+<td>Compartment with a rate rule, and dilution</td>
+<td align="center">yes</td>
+<td align="center">yes</td>
+<td align="center">yes</td>
+<td align="center">yes</td>
+<td align="center">yes</td>
+<td align="center">yes</td>
+</tr>
+<tr class="even">
+<td>Compartment with an assignment rule, and dilution</td>
+<td align="center">mostly</td>
+<td align="center">mostly</td>
+<td align="center">mostly</td>
+<td align="center">mostly</td>
+<td align="center">mostly</td>
+<td align="center">mostly</td>
+</tr>
+<tr class="odd">
+<td><code>delay</code></td>
+<td align="center">no</td>
+<td align="center">no</td>
+<td align="center">no</td>
+<td align="center">no</td>
+<td align="center">no</td>
+<td align="center">no</td>
+</tr>
+<tr class="even">
+<td>Events</td>
+<td align="center">no</td>
+<td align="center">no</td>
+<td align="center">no</td>
+<td align="center">no</td>
+<td align="center">no</td>
+<td align="center">no</td>
+</tr>
+<tr class="odd">
+<td>Exponentiation spelling</td>
+<td align="center"><code>^</code></td>
+<td align="center"><code>pow()</code></td>
+<td align="center"><code>^</code></td>
+<td align="center"><code>^</code></td>
+<td align="center"><code>^</code></td>
+<td align="center"><code>SIMINT_POWER</code></td>
+</tr>
+</tbody>
+</table>
+<p>“mostly” for an assignment-rule compartment means the dilution term
+is formed whenever the rule can be differentiated; see below.</p>
+</div>
+<div id="algebraic-rules" class="section level1">
+<h1>Algebraic rules</h1>
+<p>An algebraic rule is a constraint <code>0 = f(...)</code>, not a
+derivative. SBML does not say which variable a given rule determines, so
+<code>r2sbml</code> works it out.</p>
+<div id="rules-linear-in-one-unknown-become-assignments" class="section level2">
+<h2>Rules linear in one unknown become assignments</h2>
+<p>An <em>unknown</em> is a species, parameter or compartment that is
+not constant and has no rate or assignment rule. When a rule names
+exactly one unknown and is linear in it, <code>r2sbml</code> solves it,
+and the rule becomes an ordinary assignment rule — which every target
+supports. Here <code>0 = k - 0.9</code> defines a parameter that has no
+value of its own:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>linear <span class="ot">&lt;-</span> <span class="fu">sbml_file</span>(<span class="st">&#39;</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="st">&lt;listOfParameters&gt;&lt;parameter id=&quot;k&quot; constant=&quot;false&quot;/&gt;&lt;/listOfParameters&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="st">&lt;listOfRules&gt;&lt;algebraicRule&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="st">&lt;apply&gt;&lt;minus/&gt;&lt;ci&gt;k&lt;/ci&gt;&lt;cn&gt;0.9&lt;/cn&gt;&lt;/apply&gt;&lt;/math&gt;&lt;/algebraicRule&gt;&lt;/listOfRules&gt;&#39;</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">convert</span>(linear, <span class="st">&quot;mrgsolve&quot;</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt; no warning</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="fu">grep</span>(<span class="st">&quot;k = &quot;</span>, <span class="fu">readLines</span>(out), <span class="at">value =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt; [1] &quot;double k = -(0.0 - 0.9) / (1.0 - 0.9 - (0.0 - 0.9));&quot;</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt; [2] &quot;k = -(0.0 - 0.9) / (1.0 - 0.9 - (0.0 - 0.9));&quot;</span></span></code></pre></div>
+<p>The solution is <code>x = -f(0) / (f(1) - f(0))</code>, written out
+as is rather than simplified, which is why it reads as it does. Solving
+repeats until nothing more can be solved, so a rule that becomes linear
+in one unknown once another has been solved is solved too. Every
+algebraic rule in the SBML Test Suite is of this kind.</p>
+<p>The solution divides by the unknown’s coefficient. A rule such as
+<code>(k3 + 1) * S = T</code> with <code>k3 = -1</code> determines
+nothing, and the generated code returns <code>NaN</code> there.</p>
+</div>
+<div id="coupled-or-nonlinear-rules-become-a-dae-where-the-target-can-solve-one" class="section level2">
+<h2>Coupled or nonlinear rules become a DAE where the target can solve
+one</h2>
+<p>What is left — rules that each name several unknowns, or are
+nonlinear in the one they name — makes the model a
+differential-algebraic system. deSolve, MATLAB and Julia can each solve
+one, and <code>r2sbml</code> emits a real DAE for them: a
+<code>daspk</code> residual function, or a singular mass matrix.
+<code>sbmlalgebraicrules.xml</code> is such a model, since both of its
+rules name both <code>E</code> and <code>ES</code>. The constraint is
+genuinely enforced:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">convert</span>(<span class="fu">ex</span>(<span class="st">&quot;sbmlalgebraicrules.xml&quot;</span>))</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt; no warning</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>env <span class="ot">&lt;-</span> <span class="fu">new.env</span>(); <span class="fu">source</span>(out, <span class="at">local =</span> env)</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(deSolve<span class="sc">::</span><span class="fu">daspk</span>(<span class="at">y =</span> env<span class="sc">$</span>InitialAmounts, <span class="at">dy =</span> env<span class="sc">$</span>InitialDerivatives,</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>                                  <span class="at">times =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">10</span>, <span class="at">by =</span> <span class="dv">2</span>), <span class="at">res =</span> env<span class="sc">$</span>massBalances,</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>                                  <span class="at">parms =</span> env<span class="sc">$</span>parameters))</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="fu">max</span>(<span class="fu">abs</span>(d<span class="sc">$</span>E <span class="sc">+</span> d<span class="sc">$</span>ES <span class="sc">-</span> d<span class="sc">$</span>E_total))    <span class="co"># constraint residual, ~1e-13</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt; [1] 1.511014e-13</span></span></code></pre></div>
+<p>mrgsolve, rxode2 and ubiquity integrate ODEs only. There the rule is
+written out as a comment, the species it constrains is left at a zero
+derivative, and a warning is raised:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">convert</span>(<span class="fu">ex</span>(<span class="st">&quot;sbmlalgebraicrules.xml&quot;</span>), <span class="st">&quot;mrgsolve&quot;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt; mrgsolve cannot enforce the 2 algebraic rule(s) in this model. They are written out as comments, and the species they constrain are left at a zero derivative, so the generated code runs but does not honour the constraint.</span></span></code></pre></div>
+</div>
+<div id="the-dae-path-has-three-further-limits" class="section level2">
+<h2>The DAE path has three further limits</h2>
+<p><strong>The system must be square.</strong> Only species are
+candidates for a DAE row, and a DAE is emitted only when the number of
+remaining algebraic rules equals the number of undetermined species.
+Otherwise <code>r2sbml</code> falls back to comments and a warning
+rather than guess. A bipartite matching over the variables each rule
+names would widen this; it is not implemented.</p>
+<p><strong>Consistent initial conditions are assumed, not
+checked.</strong> A DAE has to start on the constraint manifold.
+<code>sbmlalgebraicrules.xml</code> happens to. A model that does not
+will fail inside the solver — <code>daspk</code> cannot find consistent
+initial conditions, <code>ode15s</code> rejects the initial state — and
+<strong>the error will not mention SBML or
+<code>r2sbml</code></strong>.</p>
+<p><strong><code>daspk</code>’s <code>estini</code> cannot be used as
+is.</strong> It can estimate consistent initial values, but requires the
+algebraic equations to come last in the residual vector, which the
+current row ordering does not guarantee.</p>
+</div>
+</div>
+<div id="compartments-whose-volume-changes" class="section level1">
+<h1>Compartments whose volume changes</h1>
+<p>When a volume changes, so does every concentration in it:
+<code>[S] = n/V</code> gives the dilution term
+<code>-[S] * (dV/dt) / V</code>, which libSBML’s own reaction conversion
+leaves out and <code>r2sbml</code> adds.</p>
+<p>A compartment with a <strong>rate rule</strong> is fully handled:
+<code>dV/dt</code> is the rule.</p>
+<p>A compartment with an <strong>assignment rule</strong>
+<code>V = g(...)</code> needs <code>dV/dt</code> worked out by
+differentiating <code>g</code> — with respect to time, and through the
+chain rule with respect to every integrated state it reads.
+<code>r2sbml</code> does that for sums, products, quotients, powers and
+roots, <code>exp</code>, <code>ln</code>, <code>log</code>, and the
+trigonometric and hyperbolic functions:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>volume <span class="ot">&lt;-</span> <span class="cf">function</span>(rule) <span class="fu">sbml_file</span>(<span class="fu">sprintf</span>(<span class="st">&#39;</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="st">&lt;listOfCompartments&gt;&lt;compartment id=&quot;c&quot; size=&quot;1&quot; constant=&quot;false&quot;/&gt;&lt;/listOfCompartments&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="st">&lt;listOfSpecies&gt;&lt;species id=&quot;A&quot; compartment=&quot;c&quot; initialConcentration=&quot;2&quot;</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="st">  hasOnlySubstanceUnits=&quot;false&quot; boundaryCondition=&quot;false&quot; constant=&quot;false&quot;/&gt;&lt;/listOfSpecies&gt;</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="st">&lt;listOfParameters&gt;&lt;parameter id=&quot;g&quot; value=&quot;1&quot; constant=&quot;true&quot;/&gt;&lt;/listOfParameters&gt;</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="st">&lt;listOfRules&gt;&lt;assignmentRule variable=&quot;c&quot;&gt;</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="st">&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;%s&lt;/math&gt;&lt;/assignmentRule&gt;&lt;/listOfRules&gt;&#39;</span>, rule))</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>time <span class="ot">&lt;-</span> <span class="st">&#39;&lt;csymbol encoding=&quot;text&quot; definitionURL=&quot;http://www.sbml.org/sbml/symbols/time&quot;&gt;time&lt;/csymbol&gt;&#39;</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>growing <span class="ot">&lt;-</span> <span class="fu">volume</span>(<span class="fu">sprintf</span>(<span class="st">&#39;&lt;apply&gt;&lt;plus/&gt;&lt;cn&gt;1&lt;/cn&gt;&lt;apply&gt;&lt;times/&gt;&lt;ci&gt;g&lt;/ci&gt;%s&lt;/apply&gt;&lt;/apply&gt;&#39;</span>, time))</span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">convert</span>(growing)</span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="co">#&gt; no warning</span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="fu">grep</span>(<span class="st">&quot;dA_dt = &quot;</span>, <span class="fu">readLines</span>(out), <span class="at">value =</span> <span class="cn">TRUE</span>)    <span class="co"># V = 1 + g t, so dV/dt = g</span></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="co">#&gt; [1] &quot;   dA_dt = -A * (1 * g) / c  ## includes dilution by the changing volume&quot;</span></span></code></pre></div>
+<p>It falls back to a warning, and no dilution term, when the rule reads
+a species (whose own derivative would then depend on the volume’s), or
+depends through time or a state on <code>piecewise</code>,
+<code>min</code>, <code>max</code>, <code>abs</code>, the inverse
+trigonometric functions or <code>factorial</code>:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>capped <span class="ot">&lt;-</span> <span class="fu">volume</span>(<span class="fu">sprintf</span>(<span class="st">&#39;&lt;apply&gt;&lt;min/&gt;&lt;cn&gt;5&lt;/cn&gt;&lt;apply&gt;&lt;plus/&gt;&lt;cn&gt;1&lt;/cn&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="st">  &lt;apply&gt;&lt;times/&gt;&lt;ci&gt;g&lt;/ci&gt;%s&lt;/apply&gt;&lt;/apply&gt;&lt;/apply&gt;&#39;</span>, time))</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="fu">convert</span>(capped)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt; Compartment(s) c follow an assignment rule, so deSolve receives the right volume but no dilution term for the species inside them. d[S]/dt is missing -[S]*(dV/dt)/V: the rule could not be differentiated (it reads a species, or uses piecewise, min, max, abs or another function r2sbml does not differentiate).</span></span></code></pre></div>
+<p>Events that change a compartment size are not handled, for the same
+reason events in general are not.</p>
+</div>
+<div id="delay" class="section level1">
+<h1><code>delay</code></h1>
+<p>SBML’s <code>delay</code> csymbol passes through unchanged into every
+target:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">convert</span>(<span class="fu">ex</span>(<span class="st">&quot;sbmldelay.xml&quot;</span>))</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co">#&gt; no warning</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="fu">grep</span>(<span class="st">&quot;delay&quot;</span>, <span class="fu">readLines</span>(out), <span class="at">value =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt; [1] &quot;   dP_dt = (1 / (1 + m * delay(P, delta_t)^q) - P) / tau&quot;</span></span></code></pre></div>
+<p><code>delay()</code> is not a function in base R, in C++, in MATLAB
+or in Julia, so this code does not run anywhere. A delay-differential
+equation needs a different solver interface entirely —
+<code>deSolve::lagvalue()</code> for R, and the equivalent per target.
+Only the ubiquity writer notices:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">convert</span>(<span class="fu">ex</span>(<span class="st">&quot;sbmldelay.xml&quot;</span>), <span class="st">&quot;ubiquity&quot;</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co">#&gt; ubiquity has no equivalent for: delay. They were written out unchanged and the system file will not build until they are replaced.</span></span></code></pre></div>
+<p>For the other five targets this is <strong>silent</strong>.
+<code>sbmldelay.xml</code> is the one example model whose generated
+deSolve, mrgsolve, rxode2, MATLAB and Julia output will not run.</p>
+</div>
+<div id="events" class="section level1">
+<h1>Events</h1>
+<p>Events are not exported at all. They survive as a number in the
+header comment and nothing else:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">convert</span>(<span class="fu">ex</span>(<span class="st">&quot;sbmlevent.xml&quot;</span>))</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="co">#&gt; no warning</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="fu">grep</span>(<span class="st">&quot;events&quot;</span>, <span class="fu">readLines</span>(out), <span class="at">value =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co">#&gt; [1] &quot;##              events: 2&quot;</span></span></code></pre></div>
+<p><code>sbmlevent.xml</code> has two events, and neither appears in the
+generated code. The simulation will run — and will silently ignore every
+trigger, delay and event assignment in the model. You can still inspect
+them from R:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">getEventMath</span>(<span class="fu">getModel</span>(<span class="fu">ex</span>(<span class="st">&quot;sbmlevent.xml&quot;</span>)))</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co">#&gt;   filename: /tmp/RtmpBPkfzA/Rinst1a8b63fe45a0f/r2sbml/examples/sbmlevent.xml</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co">#&gt;   error(s): 0</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co">#&gt; File: /tmp/RtmpBPkfzA/Rinst1a8b63fe45a0f/r2sbml/examples/sbmlevent.xml (Level 3, version 2)</span></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="co">#&gt; Event 0 trigger: 1 * (P1 &gt; tau)</span></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a><span class="co">#&gt;   EventAssignment 1, trigger: G2 = 1</span></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="co">#&gt; Event 1 trigger: 1 * (P1 &lt;= tau)</span></span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="co">#&gt;   EventAssignment 1, trigger: G2 = 0</span></span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="co">#&gt; [1] 0</span></span></code></pre></div>
+<p>Translating them would mean mapping SBML triggers onto each target’s
+own mechanism — deSolve’s <code>events</code>/<code>roots</code>,
+mrgsolve’s <code>$EVENT</code>, and so on — which differ enough that
+there is no shared representation to generate from.</p>
+</div>
+<div id="mathematics" class="section level1">
+<h1>Mathematics</h1>
+<p>Most of SBML’s MathML is rewritten into each target’s own spelling:
+<code>piecewise</code> becomes nested conditionals,
+<code>ceiling</code>, infinity, <code>NaN</code> and the booleans are
+spelled per target, and the Level 3 Version 2 functions
+(<code>sec</code> and its relatives, the inverse functions,
+<code>quotient</code>, <code>rem</code>, <code>implies</code>,
+<code>exponentiale</code>, <code>avogadro</code>, <code>log</code> with
+a base, <code>root</code>, and n-ary relationals and logical operators)
+are expanded into functions every target has. A logarithm with a base
+and a cube root, for instance:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>maths <span class="ot">&lt;-</span> <span class="fu">sbml_file</span>(<span class="st">&#39;</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="st">&lt;listOfParameters&gt;</span></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="st">&lt;parameter id=&quot;x&quot; value=&quot;8&quot; constant=&quot;true&quot;/&gt;</span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="st">&lt;parameter id=&quot;a&quot; constant=&quot;false&quot;/&gt;&lt;parameter id=&quot;b&quot; constant=&quot;false&quot;/&gt;</span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="st">&lt;/listOfParameters&gt;</span></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="st">&lt;listOfRules&gt;</span></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="st">&lt;assignmentRule variable=&quot;a&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;</span></span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="st">&lt;apply&gt;&lt;log/&gt;&lt;logbase&gt;&lt;cn&gt;2&lt;/cn&gt;&lt;/logbase&gt;&lt;ci&gt;x&lt;/ci&gt;&lt;/apply&gt;&lt;/math&gt;&lt;/assignmentRule&gt;</span></span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a><span class="st">&lt;assignmentRule variable=&quot;b&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;</span></span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a><span class="st">&lt;apply&gt;&lt;root/&gt;&lt;degree&gt;&lt;cn&gt;3&lt;/cn&gt;&lt;/degree&gt;&lt;ci&gt;x&lt;/ci&gt;&lt;/apply&gt;&lt;/math&gt;&lt;/assignmentRule&gt;</span></span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a><span class="st">&lt;/listOfRules&gt;&#39;</span>)</span>
+<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">convert</span>(maths)</span>
+<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a><span class="co">#&gt; no warning</span></span>
+<span id="cb11-14"><a href="#cb11-14" tabindex="-1"></a><span class="fu">grep</span>(<span class="st">&quot;^ +[ab] = &quot;</span>, <span class="fu">readLines</span>(out), <span class="at">value =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb11-15"><a href="#cb11-15" tabindex="-1"></a><span class="co">#&gt; [1] &quot;   b = (2 * (x &gt;= 0) - 1) * ((2 * (x &gt;= 0) - 1) * x)^(1 / 3)&quot;</span></span>
+<span id="cb11-16"><a href="#cb11-16" tabindex="-1"></a><span class="co">#&gt; [2] &quot;   a = log(x) / log(2)&quot;</span></span>
+<span id="cb11-17"><a href="#cb11-17" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">convert</span>(maths, <span class="st">&quot;mrgsolve&quot;</span>)</span>
+<span id="cb11-18"><a href="#cb11-18" tabindex="-1"></a><span class="co">#&gt; no warning</span></span>
+<span id="cb11-19"><a href="#cb11-19" tabindex="-1"></a><span class="fu">grep</span>(<span class="st">&quot;^double [ab] = &quot;</span>, <span class="fu">readLines</span>(out), <span class="at">value =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb11-20"><a href="#cb11-20" tabindex="-1"></a><span class="co">#&gt; [1] &quot;double b = (2.0 * (x &gt;= 0.0) - 1.0) * pow((2.0 * (x &gt;= 0.0) - 1.0) * x, 1.0 / 3.0);&quot;</span></span>
+<span id="cb11-21"><a href="#cb11-21" tabindex="-1"></a><span class="co">#&gt; [2] &quot;double a = log(x) / log(2.0);&quot;</span></span></code></pre></div>
+<p>The cube root is longer than <code>x^(1/3)</code> because it keeps
+the sign of <code>x</code>: an odd root of a negative number is real,
+but <code>x^(1/3)</code> is <code>NaN</code> there. The mrgsolve
+spelling shows one more rewrite: every whole-number literal is written
+as a double, because in C++ <code>1 / 3</code> divides as integers and
+is 0. The ubiquity output does the same, since ubiquity compiles it as
+C.</p>
+<p>What is not covered:</p>
+<p><strong><code>root(n, x)</code></strong> is written
+<code>x^(1/n)</code>, except that for a literal odd <code>n</code> it
+keeps the sign of <code>x</code>, so the cube root of <code>-8</code> is
+<code>-2</code>. A degree that is not a literal number cannot be checked
+for oddness, so there a negative <code>x</code> gives <code>NaN</code>
+even when a real root exists.</p>
+<p><strong><code>factorial</code></strong> passes through unchanged. It
+is a function in R and MATLAB; in C++ and Julia it is untested, and
+Julia’s <code>factorial</code> accepts only an integer.</p>
+<p><strong><code>quotient</code> and <code>rem</code></strong> follow
+libSBML’s own definitions, <code>floor(a/b)</code> and
+<code>a - b * floor(a/b)</code>. No test case has a negative operand, so
+whether that matches the intended truncation towards zero is
+unchecked.</p>
+<p><strong>ubiquity</strong> has no spelling for <code>factorial</code>
+or <code>delay</code>. They are written out as plain calls, and the
+writer puts a <code># WARNING</code> block in the file as well as
+raising an R warning. That matters more for ubiquity than elsewhere:
+<code>build_system()</code> accepts the file, and the failure surfaces
+much later as a C compile error naming a shared object, with nothing
+pointing back at the model.</p>
+<p><strong>Initial assignments are evaluated by libSBML</strong>, which
+treats a numeric <code>piecewise</code> condition other than 0 or 1 as
+false. A model relying on <code>piecewise(0, 5, 1)</code> taking the
+first branch gets the second.</p>
+</div>
+<div id="values-and-names" class="section level1">
+<h1>Values and names</h1>
+<div id="values-the-model-leaves-undefined" class="section level2">
+<h2>Values the model leaves undefined</h2>
+<p>SBML lets a parameter omit its value and a compartment its size, as
+long as something else defines it. When nothing does,
+<code>r2sbml</code> writes the target’s not-a-number and warns, naming
+the variable, rather than make up a plausible value:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>undefined <span class="ot">&lt;-</span> <span class="fu">sbml_file</span>(<span class="st">&#39;</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="st">&lt;listOfParameters&gt;&lt;parameter id=&quot;k&quot; constant=&quot;true&quot;/&gt;&lt;/listOfParameters&gt;&#39;</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="fu">convert</span>(undefined)</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co">#&gt; No value is defined for k, so deSolve receives NaN for it. If an algebraic rule determines it, r2sbml could not solve that rule for it: only a rule linear in a single undetermined variable is solved.</span></span></code></pre></div>
+<p>The same warning appears for a <code>NaN</code> the model assigns
+deliberately, where it is less apt.</p>
+</div>
+<div id="ids-the-target-reserves" class="section level2">
+<h2>Ids the target reserves</h2>
+<p>An SBML id can be a reserved word in the target (<code>TRUE</code>,
+<code>Inf</code>, <code>if</code>), a built-in constant, or a name the
+generated code itself uses (<code>time</code>, Julia’s <code>p</code>,
+MATLAB’s <code>t</code> and <code>y</code>). Such an id is renamed by
+appending <code>_</code>, and the conversion says so:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>reserved <span class="ot">&lt;-</span> <span class="fu">sbml_file</span>(<span class="st">&#39;</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="st">&lt;listOfParameters&gt;&lt;parameter id=&quot;Inf&quot; value=&quot;2&quot; constant=&quot;true&quot;/&gt;</span></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="st">&lt;parameter id=&quot;v&quot; constant=&quot;false&quot;/&gt;&lt;/listOfParameters&gt;</span></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="st">&lt;listOfRules&gt;&lt;assignmentRule variable=&quot;v&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;</span></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="st">&lt;apply&gt;&lt;times/&gt;&lt;ci&gt;Inf&lt;/ci&gt;&lt;cn&gt;3&lt;/cn&gt;&lt;/apply&gt;&lt;/math&gt;&lt;/assignmentRule&gt;&lt;/listOfRules&gt;&#39;</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">tempfile</span>()</span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>msg <span class="ot">&lt;-</span> <span class="fu">capture.output</span>(<span class="fu">convertReactions</span>(reserved, out, <span class="at">format =</span> <span class="st">&quot;Julia&quot;</span>))</span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a><span class="fu">grep</span>(<span class="st">&quot;Renamed&quot;</span>, msg, <span class="at">value =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Renamed Inf to Inf_: the name is reserved in Julia.&quot;</span></span></code></pre></div>
+<p>deSolve output keeps the SBML id as every name its results carry, so
+its columns are unchanged — except for a renamed compartment, which is a
+top-level variable there. The other targets show the new name. Three
+gaps remain:</p>
+<ul>
+<li>rxode2 exports no list of its reserved names, so
+<code>r2sbml</code>’s list holds only those found by probing it.</li>
+<li>An id that is not a valid name in the target at all, rather than a
+reserved one, is not renamed. libSBML promotes a local parameter
+<code>k1</code> of reaction <code>_J0</code> to <code>_J0_k1</code>,
+which R does not accept.</li>
+<li>rxode2’s <code>ini()</code> block rejects an infinite parameter
+value, and no spelling avoids that.</li>
+</ul>
+</div>
+</div>
+<div id="no-validation-is-performed" class="section level1">
+<h1>No validation is performed</h1>
+<p><code>getModel()</code> and <code>convertReactions()</code> stop if
+libSBML reports an error while <em>reading</em> the file, but reading is
+not validation. Neither runs a consistency check, so a model that loads
+cleanly may still be semantically invalid — inconsistent units, an
+overdetermined system, a species referenced before it is defined.</p>
+<p>If you need validation, run it through libSBML’s own validator or the
+<a href="https://sbml.org/facilities/validator/">online SBML
+validator</a> first. <code>r2sbml</code> assumes the model it is given
+is a correct one.</p>
+</div>
+<div id="quirks-of-the-query-functions" class="section level1">
+<h1>Quirks of the query functions</h1>
+<p>These are not code-generation issues; they affect the inspection
+API.</p>
+<div id="initial-values-are-reported-as-the-file-states-them" class="section level2">
+<h2>Initial values are reported as the file states them</h2>
+<p><code>getSpeciesIC()</code> returns whichever of
+<code>initialAmount</code> or <code>initialConcentration</code> the
+model actually sets — a species carries one or the other, never both —
+and names the result by species id:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">getModel</span>(<span class="fu">ex</span>(<span class="st">&quot;sbmlsimple.xml&quot;</span>))</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="co">#&gt;   filename: /tmp/RtmpBPkfzA/Rinst1a8b63fe45a0f/r2sbml/examples/sbmlsimple.xml</span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co">#&gt;   error(s): 0</span></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="co">#&gt; File: /tmp/RtmpBPkfzA/Rinst1a8b63fe45a0f/r2sbml/examples/sbmlsimple.xml (Level 3, version 2)</span></span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a><span class="fu">getSpeciesIC</span>(model)</span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a><span class="co">#&gt;     E     S     P    ES </span></span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a><span class="co">#&gt; 5e-21 1e-20 0e+00 0e+00</span></span></code></pre></div>
+<p><strong>No unit conversion is applied.</strong> That is deliberate: a
+query function should report the file. So a model that mixes
+amount-valued and concentration-valued species yields a vector that
+mixes units, and <code>getSpeciesIC()</code> deliberately disagrees with
+the initial conditions <code>convertReactions()</code> writes, which are
+divided by compartment volume because the generated ODE integrates
+concentrations:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">convert</span>(<span class="fu">ex</span>(<span class="st">&quot;sbmlsimple.xml&quot;</span>))</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="co">#&gt; no warning</span></span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="fu">grep</span>(<span class="st">&quot;^ +E = [0-9]&quot;</span>, <span class="fu">readLines</span>(out), <span class="at">value =</span> <span class="cn">TRUE</span>)   <span class="co"># 5e-07 = 5e-21 / 1e-14</span></span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="co">#&gt; [1] &quot;         E = 5e-07,&quot;</span></span></code></pre></div>
+<p><code>getSpeciesTable()</code> shows which column each species used,
+so you can tell the units apart:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="fu">getSpeciesTable</span>(model)[, <span class="fu">c</span>(<span class="st">&quot;ID&quot;</span>, <span class="st">&quot;InitialConcentration&quot;</span>, <span class="st">&quot;InitialAmount&quot;</span>)]</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="co">#&gt;   ID InitialConcentration InitialAmount</span></span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a><span class="co">#&gt; 1  E                  NaN         5e-21</span></span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a><span class="co">#&gt; 2  S                  NaN         1e-20</span></span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a><span class="co">#&gt; 3  P                  NaN         0e+00</span></span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a><span class="co">#&gt; 4 ES                  NaN         0e+00</span></span></code></pre></div>
+<p>A species that sets neither attribute — its value comes from an
+initial assignment or a rule — is reported as <code>NA</code> rather
+than a fabricated <code>0</code>. Note that <code>NA</code> there is
+distinct from the <code>NaN</code> in the table above, which marks the
+attribute the model simply did not use.</p>
+</div>
+<div id="names-fall-back-to-the-id" class="section level2">
+<h2>Names fall back to the id</h2>
+<p>SBML distinguishes <code>id</code>, which every element must have,
+from <code>name</code>, an optional human label.
+<code>getSpeciesNames()</code> and <code>getCmtNames()</code> both
+return the <code>name</code> where one is set and the <code>id</code>
+otherwise, which is how SBML tools conventionally display an
+element:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="fu">getSpeciesNames</span>(model)</span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;E&quot;  &quot;S&quot;  &quot;P&quot;  &quot;ES&quot;</span></span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a><span class="fu">getCmtNames</span>(model)</span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a><span class="co">#&gt; [1] &quot;comp&quot;</span></span></code></pre></div>
+<p>None of the ten examples sets a <code>name</code>, so both come back
+as ids. Use <code>getSpeciesTable()</code>, which keeps <code>ID</code>
+and <code>Name</code> in separate columns, if you need to know whether a
+label was actually present.</p>
+</div>
+<div id="absent-components-raise-an-error" class="section level2">
+<h2>Absent components raise an error</h2>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="fu">getRuleMath</span>(model)     <span class="co"># sbmlsimple.xml has no rules</span></span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a><span class="co">#&gt; Error:</span></span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a><span class="co">#&gt; ! No Rules present in the model.</span></span></code></pre></div>
+<p>This is by design: a query for a component the model does not have is
+an error, not a zero-row result. The message names the component, so a
+caller catching it can tell “no rules” from “no parameters” without
+capturing stdout.</p>
+</div>
+</div>
+<div id="things-that-are-correct-but-easy-to-misread" class="section level1">
+<h1>Things that are correct but easy to misread</h1>
+<p><strong><code>NaN</code> in <code>getSpeciesTable()</code> is not a
+bug.</strong> It marks the attribute the model did not set.</p>
+<p><strong>Console output is not part of the return value.</strong>
+<code>getRuleMath()</code> and friends return <code>0</code> invisibly
+and print their content, so <code>x &lt;- getRuleMath(m)</code> gives
+you <code>0</code>. Use <code>capture.output()</code>.</p>
+<p><strong>Compartment volumes are constants in the generated
+code</strong> — when the model says they are constant. That is not the
+volume being ignored.</p>
+<p><strong>Assignment-rule variables appear as outputs, not
+states.</strong> They are recomputed from the states at every time point
+and returned beside them; the solver never integrates them.</p>
+<p><strong>ubiquity bounds are <code>-inf inf</code>.</strong>
+Deliberate: an SBML value may be zero or negative, and a lower bound
+above the value would be inconsistent. ubiquity itself maps the
+<code>-inf</code> lower bound to <code>.Machine$double.xmin</code>, the
+smallest <em>positive</em> double — harmless for simulation, wrong for
+parameter estimation.</p>
+<p><strong>The generated header comment counts model
+components</strong>, including ones that were expanded away (function
+definitions, initial assignments) or not exported (events). It describes
+the SBML file, not the generated code.</p>
+</div>
+<div id="generated-code-is-a-starting-point" class="section level1">
+<h1>Generated code is a starting point</h1>
+<p>Even where everything above is satisfied, treat the output as a first
+draft:</p>
+<ul>
+<li>The time span is a placeholder — <code>[0 10]</code> for MATLAB,
+<code>(0.0, 10.0)</code> for Julia, and nothing at all for the R
+targets, which leave the call to you.</li>
+<li>Solver tolerances are defaults, and no target’s generated code sets
+them. Some models are stiff enough to need tuning:
+<code>sbmlmutlicompartment.xml</code> (rate constants from 2500 to
+25000) integrates cleanly to <code>t = 1</code> with
+<code>deSolve</code>’s defaults but exhausts <code>lsoda</code>’s step
+budget before <code>t = 5</code>, returning early with a warning rather
+than an error.</li>
+<li>No unit checking is performed. <code>r2sbml</code> converts initial
+conditions between amount and concentration using compartment volume,
+but it does not verify that the model’s declared units are mutually
+consistent, and it does not convert between, say, millilitres and
+litres.</li>
+</ul>
+</div>
+<div id="the-sbml-test-suite-cases-that-still-fail" class="section level1">
+<h1>The SBML Test Suite cases that still fail</h1>
+<p>For completeness, the four in-scope cases that fail:</p>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Case</th>
+<th>Cause</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>01121</td>
+<td><code>_J0_k1</code>, a promoted local parameter, is not a valid R
+name</td>
+</tr>
+<tr class="even">
+<td>01282</td>
+<td>libSBML’s evaluation of a numeric <code>piecewise</code>
+condition</td>
+</tr>
+<tr class="odd">
+<td>01323</td>
+<td>a relative error of about 3.5e-08, just outside the case’s
+tolerance</td>
+</tr>
+<tr class="even">
+<td>01486</td>
+<td>not yet diagnosed</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="where-these-are-tracked" class="section level1">
+<h1>Where these are tracked</h1>
+<p>The package keeps <code>todo.md</code> in its source repository
+recording each known gap along with how it was found, so a claim here
+can be checked against the reasoning behind it before anyone acts on it.
+The test suite covers every limitation that has a defined behaviour —
+the warnings, the fallbacks, and the closed-form solutions used to
+verify the DAE and dilution paths.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

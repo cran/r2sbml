@@ -1,0 +1,68 @@
+/* Function to get the Parameter Information i.e., Parameter Number,
+ * Parameter Name, Parameter ID, Parameter Value, Local of Global Status
+ * Parameter Units, Used in Reaction Number or ID
+ */
+
+#include <Rcpp.h>
+#include <iostream>
+#include <vector>
+#include <string>
+#include <sbml/SBMLTypes.h>
+
+using namespace std;
+using namespace Rcpp;
+
+LIBSBML_CPP_NAMESPACE_USE
+
+//'Table of the parameters in a model
+//'
+//'Lists each global parameter with its declared value and units.
+//'@param input_model input should be an SBML Model
+//'@return a data frame with one row per parameter and columns `Number`, `ID`,
+//'  `Name`, `Value` and `Units`
+//'@examples
+//'sbml_file <- system.file("examples", "sbmlassignmentrules.xml", package = "r2sbml")
+//'model <- getModel(sbml_file)
+//'getParameterTable(model)
+// [[Rcpp::export]]
+Rcpp::DataFrame getParameterTable (SEXP input_model) {
+
+  Model* model = Rcpp::XPtr<Model>(input_model);
+
+  if (model == 0)
+  {
+    Rcpp::stop("No model present.");
+  }
+
+  int numParams = model->getNumParameters();
+  if (numParams == 0){
+    Rcpp::stop("No parameters present in the model.");
+  }
+
+  NumericVector paramNum;
+  StringVector paramName;
+  StringVector paramID;
+  NumericVector paramValue;
+  StringVector paramUnits;
+
+  for(int i = 0; i<numParams; i++){
+
+    Parameter *param = model->getParameter(i);
+    paramNum.push_back(i+1);
+    paramName.push_back(param->getName());
+    paramID.push_back(param->getIdAttribute());
+    paramValue.push_back(param->getValue());
+    paramUnits.push_back(param->getUnits());
+
+  }
+
+  DataFrame paramTable = DataFrame::create(_("Number") = paramNum,
+                                             _("ID") = paramID,
+                                             _("Name") = paramName,
+                                             _("Value") = paramValue,
+                                             _("Units") = paramUnits);
+
+  return paramTable;
+}
+
+

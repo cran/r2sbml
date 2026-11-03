@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Getting started with r2sbml</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Getting started with r2sbml</h1>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#reading-a-model" id="toc-reading-a-model">Reading a
+model</a>
+<ul>
+<li><a href="#functions-that-return-data" id="toc-functions-that-return-data">Functions that return data</a></li>
+<li><a href="#functions-that-print" id="toc-functions-that-print">Functions that print</a></li>
+<li><a href="#absent-components-are-an-error-not-an-empty-result" id="toc-absent-components-are-an-error-not-an-empty-result">Absent
+components are an error, not an empty result</a></li>
+</ul></li>
+<li><a href="#exporting-mass-balances" id="toc-exporting-mass-balances">Exporting mass balances</a>
+<ul>
+<li><a href="#what-happens-before-anything-is-written" id="toc-what-happens-before-anything-is-written">What happens before
+anything is written</a></li>
+<li><a href="#the-desolve-output" id="toc-the-desolve-output">The
+deSolve output</a></li>
+<li><a href="#the-other-five-targets" id="toc-the-other-five-targets">The other five targets</a></li>
+</ul></li>
+<li><a href="#model-features-that-change-the-shape-of-the-output" id="toc-model-features-that-change-the-shape-of-the-output">Model
+features that change the shape of the output</a>
+<ul>
+<li><a href="#assignment-rules" id="toc-assignment-rules">Assignment
+rules</a></li>
+<li><a href="#algebraic-rules-make-the-model-a-dae" id="toc-algebraic-rules-make-the-model-a-dae">Algebraic rules make the
+model a DAE</a></li>
+<li><a href="#changing-compartment-volumes" id="toc-changing-compartment-volumes">Changing compartment
+volumes</a></li>
+</ul></li>
+<li><a href="#practical-notes" id="toc-practical-notes">Practical
+notes</a></li>
+<li><a href="#where-to-go-next" id="toc-where-to-go-next">Where to go
+next</a></li>
+</ul>
+</div>
+
+<p><code>r2sbml</code> is a thin R interface to <a href="https://sbml.org/software/libsbml/">libSBML</a>, built with Rcpp.
+It does two things:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Reads</strong> an <a href="https://sbml.org">SBML</a> model
+and lets you query its components from R — species, compartments,
+parameters, reactions, rules, events and function definitions.</li>
+<li><strong>Exports</strong> the model’s mass balances as
+ready-to-simulate code for six ODE targets: deSolve, mrgsolve,
+rxode2/nlmixr2, MATLAB, Julia and ubiquity.</li>
+</ol>
+<p>It does <em>not</em> let you modify a model. There is no setter API
+and no way to write SBML back out; <code>r2sbml</code> reads and
+exports.</p>
+<p>libSBML itself is bundled with the package and compiled from source
+during installation, so nothing needs to be installed separately and the
+build downloads nothing. See the README for the compiler and header
+prerequisites.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(r2sbml)</span></code></pre></div>
+<p>Ten small example models ship with the package and are used
+throughout this vignette:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">basename</span>(<span class="fu">list.files</span>(<span class="fu">system.file</span>(<span class="st">&quot;examples&quot;</span>, <span class="at">package =</span> <span class="st">&quot;r2sbml&quot;</span>), <span class="at">pattern =</span> <span class="st">&quot;[.]xml$&quot;</span>))</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&gt;  [1] &quot;sbmlalgebraicrules.xml&quot;              </span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt;  [2] &quot;sbmlassignmentrules.xml&quot;             </span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt;  [3] &quot;sbmlboundaryconditions.xml&quot;          </span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt;  [4] &quot;sbmlconversionfactor-alternative.xml&quot;</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt;  [5] &quot;sbmlconversionfactor.xml&quot;            </span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt;  [6] &quot;sbmldelay.xml&quot;                       </span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt;  [7] &quot;sbmlevent.xml&quot;                       </span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt;  [8] &quot;sbmlfunctiondefinition.xml&quot;          </span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt;  [9] &quot;sbmlmutlicompartment.xml&quot;            </span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="co">#&gt; [10] &quot;sbmlsimple.xml&quot;</span></span></code></pre></div>
+<div id="reading-a-model" class="section level1">
+<h1>Reading a model</h1>
+<p>Everything except <code>convertReactions()</code> works in two
+phases. First <code>getModel()</code> reads the file, keeps the
+underlying <code>SBMLDocument</code> alive, and hands back an external
+pointer:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>sbml_file <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;examples&quot;</span>, <span class="st">&quot;sbmlsimple.xml&quot;</span>, <span class="at">package =</span> <span class="st">&quot;r2sbml&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">getModel</span>(sbml_file)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt;   filename: /tmp/RtmpBPkfzA/Rinst1a8b63fe45a0f/r2sbml/examples/sbmlsimple.xml</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt;   error(s): 0</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt; File: /tmp/RtmpBPkfzA/Rinst1a8b63fe45a0f/r2sbml/examples/sbmlsimple.xml (Level 3, version 2)</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="fu">class</span>(model)</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt; [1] &quot;externalptr&quot;</span></span></code></pre></div>
+<p><code>getModel()</code> prints a short header as a side effect — the
+file it read, how many SBML errors it found, and the Level/Version of
+the document. Errors are fatal: it prints them and stops, naming the
+file, rather than handing back a pointer you cannot trust. Warnings and
+informational diagnostics are not fatal — they are reported as an R
+warning and the model still loads, which is the same rule
+<code>convertReactions()</code> applies.</p>
+<p>Reading is not validation. libSBML reports parse-level and structural
+problems as it reads, but <code>getModel()</code> does not run a
+consistency check, so a file that loads cleanly can still be
+semantically questionable — inconsistent units, say. <code>r2sbml</code>
+never validates a model.</p>
+<p>Every query function then takes that pointer as its only
+argument.</p>
+<div id="functions-that-return-data" class="section level2">
+<h2>Functions that return data</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">getSpeciesTable</span>(model)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt;   Number Name ID InitialConcentration InitialAmount Compartment CompartmentVol</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt; 1      1       E                  NaN         5e-21        comp          1e-14</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt; 2      2       S                  NaN         1e-20        comp          1e-14</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt; 3      3       P                  NaN         0e+00        comp          1e-14</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; 4      4      ES                  NaN         0e+00        comp          1e-14</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt;   BoundaryCondition Constant</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt; 1                 0    FALSE</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt; 2                 0    FALSE</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt; 3                 0    FALSE</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt; 4                 0    FALSE</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="fu">getReactionTable</span>(model)</span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="co">#&gt;   Number   ID Name Reversible                          RateLaw</span></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="co">#&gt; 1      1  veq            TRUE comp * (kon * E * S - koff * ES)</span></span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a><span class="co">#&gt; 2      2 vcat           FALSE                 comp * kcat * ES</span></span></code></pre></div>
+<p><code>getSpeciesTable()</code> reports both
+<code>InitialConcentration</code> and <code>InitialAmount</code>
+columns. An SBML species carries one or the other, never both, and the
+unset one reads back as <code>NaN</code> — so the <code>NaN</code>
+column above is telling you this model is amount-based, not that
+anything is wrong.</p>
+<p>Simpler accessors return plain vectors:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">getCmtNames</span>(model)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;comp&quot;</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="fu">getCmtSizes</span>(model)</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt; [1] 1e-14</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="fu">getNumSpecies</span>(model)</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt; [1] 4</span></span></code></pre></div>
+<p>The full set of data-returning functions:</p>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>getSpeciesTable()</code>, <code>getParameterTable()</code>,
+<code>getReactionTable()</code></td>
+<td>a <code>data.frame</code></td>
+</tr>
+<tr class="even">
+<td><code>getSpeciesNames()</code>, <code>getCmtNames()</code></td>
+<td>a character vector</td>
+</tr>
+<tr class="odd">
+<td><code>getSpeciesIC()</code>, <code>getCmtSizes()</code></td>
+<td>a numeric vector</td>
+</tr>
+<tr class="even">
+<td><code>getNumSpecies()</code></td>
+<td>an integer</td>
+</tr>
+</tbody>
+</table>
+<p><code>getSpeciesIC()</code> reports whichever of
+<code>initialAmount</code> or <code>initialConcentration</code> the
+model sets, named by species id, and applies <strong>no</strong> unit
+conversion — unlike <code>convertReactions()</code>, which must divide
+an amount by the compartment volume because the ODE it writes integrates
+concentrations. <code>getSpeciesNames()</code> and
+<code>getCmtNames()</code> return the SBML <code>name</code> where one
+is set and fall back to the <code>id</code> otherwise. See
+<code>vignette(&quot;limitations&quot;, package = &quot;r2sbml&quot;)</code> for both.</p>
+</div>
+<div id="functions-that-print" class="section level2">
+<h2>Functions that print</h2>
+<p>A second family writes to the console and returns <code>0</code>
+invisibly. Assigning them gets you the <code>0</code>, not the text, so
+capture them instead:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>rules_model <span class="ot">&lt;-</span> <span class="fu">getModel</span>(<span class="fu">system.file</span>(<span class="st">&quot;examples&quot;</span>, <span class="st">&quot;sbmlassignmentrules.xml&quot;</span>,</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>                                    <span class="at">package =</span> <span class="st">&quot;r2sbml&quot;</span>))</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt;   filename: /tmp/RtmpBPkfzA/Rinst1a8b63fe45a0f/r2sbml/examples/sbmlassignmentrules.xml</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt;   error(s): 0</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt; File: /tmp/RtmpBPkfzA/Rinst1a8b63fe45a0f/r2sbml/examples/sbmlassignmentrules.xml (Level 3, version 2)</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="fu">getRuleMath</span>(rules_model)</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt; Rule 0, formula: S1 = T / (1 + Keq)</span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&gt; Rule 1, formula: S2 = Keq * S1</span></span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&gt; [1] 0</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>txt <span class="ot">&lt;-</span> <span class="fu">capture.output</span>(<span class="fu">getReactionMath</span>(model))</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>txt</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Reaction 0, formula: comp * (kon * E * S - koff * ES)&quot;</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt; [2] &quot;Reaction 1, formula: comp * kcat * ES&quot;                </span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt; [3] &quot;[1] 0&quot;</span></span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Prints</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>getRuleMath()</code></td>
+<td>assignment, rate and algebraic rules</td>
+</tr>
+<tr class="even">
+<td><code>getReactionMath()</code></td>
+<td>kinetic laws</td>
+</tr>
+<tr class="odd">
+<td><code>getFunctionDefinition()</code></td>
+<td>function definitions</td>
+</tr>
+<tr class="even">
+<td><code>getEventMath()</code></td>
+<td>event triggers, delays and assignments</td>
+</tr>
+<tr class="odd">
+<td><code>printSBML()</code>, <code>echoSBML()</code></td>
+<td>the document itself</td>
+</tr>
+</tbody>
+</table>
+<p><code>printSBML()</code> and <code>echoSBML()</code> are the
+exception to the two-phase rule: they take a <em>filename</em>, not a
+model pointer.</p>
+</div>
+<div id="absent-components-are-an-error-not-an-empty-result" class="section level2">
+<h2>Absent components are an error, not an empty result</h2>
+<p>A query for a component the model does not have raises an error. It
+does not return a zero-row data frame or a zero-length vector:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># sbmlsimple.xml has no rules at all</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">getRuleMath</span>(model)</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&gt; Error:</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&gt; ! No Rules present in the model.</span></span></code></pre></div>
+<p>The error names the component that was missing, so a caller can tell
+the cases apart. If you are looping over many models, wrap the call:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>safely <span class="ot">&lt;-</span> <span class="cf">function</span>(expr) <span class="fu">tryCatch</span>(expr, <span class="at">error =</span> <span class="cf">function</span>(e) <span class="cn">NULL</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>files  <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="fu">system.file</span>(<span class="st">&quot;examples&quot;</span>, <span class="at">package =</span> <span class="st">&quot;r2sbml&quot;</span>),</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>                     <span class="at">pattern =</span> <span class="st">&quot;[.]xml$&quot;</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>has_rules <span class="ot">&lt;-</span> <span class="fu">vapply</span>(files, <span class="cf">function</span>(f) {</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>  <span class="sc">!</span><span class="fu">is.null</span>(<span class="fu">safely</span>(<span class="fu">capture.output</span>(<span class="fu">getRuleMath</span>(<span class="fu">getModel</span>(f)))))</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>}, <span class="fu">logical</span>(<span class="dv">1</span>))</span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">model =</span> <span class="fu">basename</span>(files), <span class="at">has_rules =</span> <span class="fu">unname</span>(has_rules))</span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a><span class="co">#&gt;                                   model has_rules</span></span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a><span class="co">#&gt; 1                sbmlalgebraicrules.xml      TRUE</span></span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a><span class="co">#&gt; 2               sbmlassignmentrules.xml      TRUE</span></span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a><span class="co">#&gt; 3            sbmlboundaryconditions.xml      TRUE</span></span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a><span class="co">#&gt; 4  sbmlconversionfactor-alternative.xml     FALSE</span></span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a><span class="co">#&gt; 5              sbmlconversionfactor.xml     FALSE</span></span>
+<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a><span class="co">#&gt; 6                         sbmldelay.xml      TRUE</span></span>
+<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a><span class="co">#&gt; 7                         sbmlevent.xml      TRUE</span></span>
+<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a><span class="co">#&gt; 8            sbmlfunctiondefinition.xml     FALSE</span></span>
+<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a><span class="co">#&gt; 9              sbmlmutlicompartment.xml     FALSE</span></span>
+<span id="cb9-19"><a href="#cb9-19" tabindex="-1"></a><span class="co">#&gt; 10                       sbmlsimple.xml     FALSE</span></span></code></pre></div>
+<p>The same applies to <code>getParameterTable()</code> on a model whose
+parameters are all local to its kinetic laws —
+<code>sbmlsimple.xml</code> is exactly that case.</p>
+</div>
+</div>
+<div id="exporting-mass-balances" class="section level1">
+<h1>Exporting mass balances</h1>
+<p><code>convertReactions()</code> is the other half of the package, and
+the one function that does not take a model pointer. It reads the SBML
+file itself and writes a code file, returning <code>NULL</code>
+invisibly:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>out_r <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">&quot;.R&quot;</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">convertReactions</span>(sbml_file, out_r, <span class="at">format =</span> <span class="st">&quot;R&quot;</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co">#&gt; Conversion completed.</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co">#&gt; Number of ODEs - 4</span></span></code></pre></div>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><code>format</code></th>
+<th>Target</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>&quot;R&quot;</code> or <code>&quot;deSolve&quot;</code> (default)</td>
+<td><a href="https://cran.r-project.org/package=deSolve">deSolve</a></td>
+</tr>
+<tr class="even">
+<td><code>&quot;mrgsolve&quot;</code></td>
+<td><a href="https://mrgsolve.org">mrgsolve</a></td>
+</tr>
+<tr class="odd">
+<td><code>&quot;nlmixr2&quot;</code> or <code>&quot;rxode2&quot;</code></td>
+<td><a href="https://nlmixr2.github.io/rxode2/">rxode2</a> /
+nlmixr2</td>
+</tr>
+<tr class="even">
+<td><code>&quot;MATLAB&quot;</code> or <code>&quot;matlab&quot;</code></td>
+<td>a function file for <code>ode15s</code></td>
+</tr>
+<tr class="odd">
+<td><code>&quot;Julia&quot;</code> or <code>&quot;julia&quot;</code></td>
+<td>an <code>ODEProblem</code> for DifferentialEquations.jl</td>
+</tr>
+<tr class="even">
+<td><code>&quot;ubiquity&quot;</code> or <code>&quot;Ubiquity&quot;</code></td>
+<td>a <a href="https://r.ubiquity.tools">ubiquity</a> system file</td>
+</tr>
+</tbody>
+</table>
+<p>An unrecognised format is an error, so a typo cannot leave you with
+an empty file that looks like a successful conversion:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">convertReactions</span>(sbml_file, <span class="fu">tempfile</span>(), <span class="at">format =</span> <span class="st">&quot;fortran&quot;</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="co">#&gt; Conversion completed.</span></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="co">#&gt; Number of ODEs - 4</span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="co">#&gt; Error:</span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="co">#&gt; ! Unknown format &#39;fortran&#39;. Use one of &#39;R&#39;/&#39;deSolve&#39;, &#39;mrgsolve&#39;, &#39;nlmixr2&#39;/&#39;rxode2&#39;, &#39;MATLAB&#39;, &#39;Julia&#39; or &#39;ubiquity&#39;.</span></span></code></pre></div>
+<div id="what-happens-before-anything-is-written" class="section level2">
+<h2>What happens before anything is written</h2>
+<p><code>convertReactions()</code> applies four libSBML converters in
+sequence:</p>
+<ol style="list-style-type: decimal">
+<li><code>replaceReactions</code> — every reaction becomes a rate
+rule</li>
+<li><code>promoteLocalParameters</code> — parameters local to a kinetic
+law become global</li>
+<li><code>expandInitialAssignments</code> — initial assignments are
+folded into values</li>
+<li><code>expandFunctionDefinitions</code> — user-defined functions are
+inlined</li>
+</ol>
+<p>By the time a writer runs, the model is in rate-rule form with no
+local parameters and no function definitions left. That is why the
+generated code never contains a function definition, and why parameters
+that were buried inside a kinetic law appear as top-level constants.</p>
+</div>
+<div id="the-desolve-output" class="section level2">
+<h2>The deSolve output</h2>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">readLines</span>(out_r), <span class="at">sep =</span> <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="co">#&gt; ## Automatically generated model file by r2sbml at </span></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="co">#&gt; ## Writing the model ODEs for solving in R</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co">#&gt; ## Solving the model requires desolve package </span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co">#&gt; ## Model Summary </span></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="co">#&gt; ## functionDefinitions: 0</span></span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="co">#&gt; ##     unitDefinitions: 2</span></span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a><span class="co">#&gt; ##    compartmentTypes: 0</span></span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a><span class="co">#&gt; ##        speciesTypes: 0</span></span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a><span class="co">#&gt; ##        compartments: 1</span></span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a><span class="co">#&gt; ##             species: 4</span></span>
+<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a><span class="co">#&gt; ##          parameters: 3</span></span>
+<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a><span class="co">#&gt; ##  initialAssignments: 0</span></span>
+<span id="cb12-15"><a href="#cb12-15" tabindex="-1"></a><span class="co">#&gt; ##               rules: 4</span></span>
+<span id="cb12-16"><a href="#cb12-16" tabindex="-1"></a><span class="co">#&gt; ##         constraints: 0</span></span>
+<span id="cb12-17"><a href="#cb12-17" tabindex="-1"></a><span class="co">#&gt; ##           reactions: 0</span></span>
+<span id="cb12-18"><a href="#cb12-18" tabindex="-1"></a><span class="co">#&gt; ##              events: 0</span></span>
+<span id="cb12-19"><a href="#cb12-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-20"><a href="#cb12-20" tabindex="-1"></a><span class="co">#&gt; ## Load required packages</span></span>
+<span id="cb12-21"><a href="#cb12-21" tabindex="-1"></a><span class="co">#&gt; library(deSolve)</span></span>
+<span id="cb12-22"><a href="#cb12-22" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-23"><a href="#cb12-23" tabindex="-1"></a><span class="co">#&gt; ## Units Definitions</span></span>
+<span id="cb12-24"><a href="#cb12-24" tabindex="-1"></a><span class="co">#&gt; ## per_second: Kind=, : Exponent=-1</span></span>
+<span id="cb12-25"><a href="#cb12-25" tabindex="-1"></a><span class="co">#&gt; ## litre_per_mole_second: Kind=, : Exponent=-1</span></span>
+<span id="cb12-26"><a href="#cb12-26" tabindex="-1"></a><span class="co">#&gt; ## litre_per_mole_second: Kind=, : Exponent=1</span></span>
+<span id="cb12-27"><a href="#cb12-27" tabindex="-1"></a><span class="co">#&gt; ## litre_per_mole_second: Kind=, : Exponent=-1</span></span>
+<span id="cb12-28"><a href="#cb12-28" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-29"><a href="#cb12-29" tabindex="-1"></a><span class="co">#&gt; ## Compartments </span></span>
+<span id="cb12-30"><a href="#cb12-30" tabindex="-1"></a><span class="co">#&gt; comp = 1e-14</span></span>
+<span id="cb12-31"><a href="#cb12-31" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-32"><a href="#cb12-32" tabindex="-1"></a><span class="co">#&gt; ## Initial Amounts</span></span>
+<span id="cb12-33"><a href="#cb12-33" tabindex="-1"></a><span class="co">#&gt; InitialAmounts &lt;- c(</span></span>
+<span id="cb12-34"><a href="#cb12-34" tabindex="-1"></a><span class="co">#&gt;          E = 5e-07,</span></span>
+<span id="cb12-35"><a href="#cb12-35" tabindex="-1"></a><span class="co">#&gt;          S = 1e-06,</span></span>
+<span id="cb12-36"><a href="#cb12-36" tabindex="-1"></a><span class="co">#&gt;          P = 0,</span></span>
+<span id="cb12-37"><a href="#cb12-37" tabindex="-1"></a><span class="co">#&gt;          ES = 0</span></span>
+<span id="cb12-38"><a href="#cb12-38" tabindex="-1"></a><span class="co">#&gt;                     )</span></span>
+<span id="cb12-39"><a href="#cb12-39" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-40"><a href="#cb12-40" tabindex="-1"></a><span class="co">#&gt; ## Parameters</span></span>
+<span id="cb12-41"><a href="#cb12-41" tabindex="-1"></a><span class="co">#&gt; parameters &lt;- c(</span></span>
+<span id="cb12-42"><a href="#cb12-42" tabindex="-1"></a><span class="co">#&gt;          veq_koff = 0.2,</span></span>
+<span id="cb12-43"><a href="#cb12-43" tabindex="-1"></a><span class="co">#&gt;          veq_kon = 1e+06,</span></span>
+<span id="cb12-44"><a href="#cb12-44" tabindex="-1"></a><span class="co">#&gt;          vcat_kcat = 0.1</span></span>
+<span id="cb12-45"><a href="#cb12-45" tabindex="-1"></a><span class="co">#&gt;                )</span></span>
+<span id="cb12-46"><a href="#cb12-46" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-47"><a href="#cb12-47" tabindex="-1"></a><span class="co">#&gt; ## Reactions </span></span>
+<span id="cb12-48"><a href="#cb12-48" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-49"><a href="#cb12-49" tabindex="-1"></a><span class="co">#&gt; ## Mass-Balances (ODEs)</span></span>
+<span id="cb12-50"><a href="#cb12-50" tabindex="-1"></a><span class="co">#&gt; massBalances &lt;- function(time, states, params){</span></span>
+<span id="cb12-51"><a href="#cb12-51" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-52"><a href="#cb12-52" tabindex="-1"></a><span class="co">#&gt;    ## Get States Names </span></span>
+<span id="cb12-53"><a href="#cb12-53" tabindex="-1"></a><span class="co">#&gt;    E = states[[&quot;E&quot;]]</span></span>
+<span id="cb12-54"><a href="#cb12-54" tabindex="-1"></a><span class="co">#&gt;    S = states[[&quot;S&quot;]]</span></span>
+<span id="cb12-55"><a href="#cb12-55" tabindex="-1"></a><span class="co">#&gt;    P = states[[&quot;P&quot;]]</span></span>
+<span id="cb12-56"><a href="#cb12-56" tabindex="-1"></a><span class="co">#&gt;    ES = states[[&quot;ES&quot;]]</span></span>
+<span id="cb12-57"><a href="#cb12-57" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-58"><a href="#cb12-58" tabindex="-1"></a><span class="co">#&gt;    ## Get Parameter Names </span></span>
+<span id="cb12-59"><a href="#cb12-59" tabindex="-1"></a><span class="co">#&gt;    veq_koff = params[[&quot;veq_koff&quot;]]</span></span>
+<span id="cb12-60"><a href="#cb12-60" tabindex="-1"></a><span class="co">#&gt;    veq_kon = params[[&quot;veq_kon&quot;]]</span></span>
+<span id="cb12-61"><a href="#cb12-61" tabindex="-1"></a><span class="co">#&gt;    vcat_kcat = params[[&quot;vcat_kcat&quot;]]</span></span>
+<span id="cb12-62"><a href="#cb12-62" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-63"><a href="#cb12-63" tabindex="-1"></a><span class="co">#&gt;    ## Mass Balances</span></span>
+<span id="cb12-64"><a href="#cb12-64" tabindex="-1"></a><span class="co">#&gt;    dE_dt = -1 * (comp * (veq_kon * E * S - veq_koff * ES) / comp) + comp * vcat_kcat * ES / comp</span></span>
+<span id="cb12-65"><a href="#cb12-65" tabindex="-1"></a><span class="co">#&gt;    dS_dt = -1 * (comp * (veq_kon * E * S - veq_koff * ES) / comp)</span></span>
+<span id="cb12-66"><a href="#cb12-66" tabindex="-1"></a><span class="co">#&gt;    dP_dt = comp * vcat_kcat * ES / comp</span></span>
+<span id="cb12-67"><a href="#cb12-67" tabindex="-1"></a><span class="co">#&gt;    dES_dt = comp * (veq_kon * E * S - veq_koff * ES) / comp + -1 * (comp * vcat_kcat * ES / comp)</span></span>
+<span id="cb12-68"><a href="#cb12-68" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-69"><a href="#cb12-69" tabindex="-1"></a><span class="co">#&gt;    ## Make a list of Mass Balances</span></span>
+<span id="cb12-70"><a href="#cb12-70" tabindex="-1"></a><span class="co">#&gt;    MassBalances &lt;- c(</span></span>
+<span id="cb12-71"><a href="#cb12-71" tabindex="-1"></a><span class="co">#&gt;      dE_dt ,</span></span>
+<span id="cb12-72"><a href="#cb12-72" tabindex="-1"></a><span class="co">#&gt;      dS_dt ,</span></span>
+<span id="cb12-73"><a href="#cb12-73" tabindex="-1"></a><span class="co">#&gt;      dP_dt ,</span></span>
+<span id="cb12-74"><a href="#cb12-74" tabindex="-1"></a><span class="co">#&gt;      dES_dt</span></span>
+<span id="cb12-75"><a href="#cb12-75" tabindex="-1"></a><span class="co">#&gt;    )</span></span>
+<span id="cb12-76"><a href="#cb12-76" tabindex="-1"></a><span class="co">#&gt;    return(list(MassBalances))</span></span>
+<span id="cb12-77"><a href="#cb12-77" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-78"><a href="#cb12-78" tabindex="-1"></a><span class="co">#&gt; }</span></span></code></pre></div>
+<p>Three things in that file are worth pointing out.</p>
+<p><strong>The state vector is decided deliberately.</strong> It is not
+simply “one equation per rule”. A species set by an <em>assignment
+rule</em> is computed inside the right-hand side and given no slot,
+because its value follows from the rule at every time point. A species
+with <em>no</em> rate rule — a boundary condition, or one in no reaction
+— keeps its slot with a zero derivative so it still appears in the
+solution.</p>
+<p><strong>Initial conditions are converted into the units the ODE
+integrates.</strong> An SBML species symbol is a concentration unless
+<code>hasOnlySubstanceUnits</code> is set, and the rate rules are
+divided by the compartment volume to match. <code>sbmlsimple.xml</code>
+declares <code>initialAmount = 5e-21</code> in a <code>1e-14</code>
+compartment, so the generated initial condition is <code>5e-07</code>,
+not <code>5e-21</code>. The volume used is the species’ own
+compartment’s, so a multi-compartment model rescales species
+individually.</p>
+<p><strong>Compartment volumes are emitted as plain constants</strong>
+when they are constant. If a compartment carries a rate rule instead, it
+joins the state vector and is integrated — see “Changing compartment
+volumes” below.</p>
+<p>You can run the result directly:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">library</span>(deSolve)</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>env <span class="ot">&lt;-</span> <span class="fu">new.env</span>()</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="fu">source</span>(out_r, <span class="at">local =</span> env)</span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a>solution <span class="ot">&lt;-</span> <span class="fu">ode</span>(<span class="at">y     =</span> env<span class="sc">$</span>InitialAmounts,</span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>                <span class="at">times =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="at">by =</span> <span class="dv">1</span>),</span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>                <span class="at">func  =</span> env<span class="sc">$</span>massBalances,</span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a>                <span class="at">parms =</span> env<span class="sc">$</span>parameters)</span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a><span class="fu">round</span>(solution, <span class="dv">9</span>)</span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a><span class="co">#&gt;   time        E        S        P       ES</span></span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a><span class="co">#&gt; 1    0 5.00e-07 1.00e-06 0.00e+00 0.00e+00</span></span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a><span class="co">#&gt; 2    1 2.51e-07 7.36e-07 1.60e-08 2.49e-07</span></span>
+<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a><span class="co">#&gt; 3    2 1.90e-07 6.46e-07 4.40e-08 3.10e-07</span></span>
+<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a><span class="co">#&gt; 4    3 1.74e-07 5.98e-07 7.60e-08 3.26e-07</span></span>
+<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a><span class="co">#&gt; 5    4 1.72e-07 5.63e-07 1.09e-07 3.28e-07</span></span>
+<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a><span class="co">#&gt; 6    5 1.75e-07 5.34e-07 1.42e-07 3.25e-07</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># free + bound enzyme is conserved, and so is total substrate</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(solution)</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="fu">range</span>(d<span class="sc">$</span>E <span class="sc">+</span> d<span class="sc">$</span>ES)</span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co">#&gt; [1] 5e-07 5e-07</span></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="fu">range</span>(d<span class="sc">$</span>S <span class="sc">+</span> d<span class="sc">$</span>ES <span class="sc">+</span> d<span class="sc">$</span>P)</span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="co">#&gt; [1] 1e-06 1e-06</span></span></code></pre></div>
+</div>
+<div id="the-other-five-targets" class="section level2">
+<h2>The other five targets</h2>
+<p>Each target gets its own spelling of the same mathematics.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>out_mrg <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">&quot;.cpp&quot;</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="fu">convertReactions</span>(sbml_file, out_mrg, <span class="at">format =</span> <span class="st">&quot;mrgsolve&quot;</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="co">#&gt; Conversion completed.</span></span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="co">#&gt; Number of ODEs - 4</span></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">readLines</span>(out_mrg), <span class="at">sep =</span> <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a><span class="co">#&gt; ## Automatically generated mrgsolve model file by r2sbml</span></span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a><span class="co">#&gt; $PROB</span></span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a><span class="co">#&gt; $PARAM</span></span>
+<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a><span class="co">#&gt; veq_koff = 0.2</span></span>
+<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a><span class="co">#&gt; veq_kon = 1e+06</span></span>
+<span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a><span class="co">#&gt; vcat_kcat = 0.1</span></span>
+<span id="cb15-14"><a href="#cb15-14" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-15"><a href="#cb15-15" tabindex="-1"></a><span class="co">#&gt; $CMT</span></span>
+<span id="cb15-16"><a href="#cb15-16" tabindex="-1"></a><span class="co">#&gt; E</span></span>
+<span id="cb15-17"><a href="#cb15-17" tabindex="-1"></a><span class="co">#&gt; S</span></span>
+<span id="cb15-18"><a href="#cb15-18" tabindex="-1"></a><span class="co">#&gt; P</span></span>
+<span id="cb15-19"><a href="#cb15-19" tabindex="-1"></a><span class="co">#&gt; ES</span></span>
+<span id="cb15-20"><a href="#cb15-20" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-21"><a href="#cb15-21" tabindex="-1"></a><span class="co">#&gt; $MAIN</span></span>
+<span id="cb15-22"><a href="#cb15-22" tabindex="-1"></a><span class="co">#&gt; E_0 = 5e-07;</span></span>
+<span id="cb15-23"><a href="#cb15-23" tabindex="-1"></a><span class="co">#&gt; S_0 = 1e-06;</span></span>
+<span id="cb15-24"><a href="#cb15-24" tabindex="-1"></a><span class="co">#&gt; P_0 = 0;</span></span>
+<span id="cb15-25"><a href="#cb15-25" tabindex="-1"></a><span class="co">#&gt; ES_0 = 0;</span></span>
+<span id="cb15-26"><a href="#cb15-26" tabindex="-1"></a><span class="co">#&gt; double comp = 1e-14;</span></span>
+<span id="cb15-27"><a href="#cb15-27" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-28"><a href="#cb15-28" tabindex="-1"></a><span class="co">#&gt; $ODE</span></span>
+<span id="cb15-29"><a href="#cb15-29" tabindex="-1"></a><span class="co">#&gt; dxdt_E = -1.0 * (comp * (veq_kon * E * S - veq_koff * ES) / comp) + comp * vcat_kcat * ES / comp;</span></span>
+<span id="cb15-30"><a href="#cb15-30" tabindex="-1"></a><span class="co">#&gt; dxdt_S = -1.0 * (comp * (veq_kon * E * S - veq_koff * ES) / comp);</span></span>
+<span id="cb15-31"><a href="#cb15-31" tabindex="-1"></a><span class="co">#&gt; dxdt_P = comp * vcat_kcat * ES / comp;</span></span>
+<span id="cb15-32"><a href="#cb15-32" tabindex="-1"></a><span class="co">#&gt; dxdt_ES = comp * (veq_kon * E * S - veq_koff * ES) / comp + -1.0 * (comp * vcat_kcat * ES / comp);</span></span></code></pre></div>
+<p>mrgsolve model blocks are C++, where <code>^</code> is bitwise XOR
+and does not compile for doubles, so powers are written
+<code>pow(a, b)</code> for this target alone.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>out_rx <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">&quot;.R&quot;</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="fu">convertReactions</span>(sbml_file, out_rx, <span class="at">format =</span> <span class="st">&quot;nlmixr2&quot;</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a><span class="co">#&gt; Conversion completed.</span></span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a><span class="co">#&gt; Number of ODEs - 4</span></span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">readLines</span>(out_rx), <span class="at">sep =</span> <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a><span class="co">#&gt; ## Automatically generated nlmixr2/rxode model file by r2sbml</span></span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a><span class="co">#&gt; model &lt;- function() {</span></span>
+<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a><span class="co">#&gt;   ini({</span></span>
+<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a><span class="co">#&gt;     veq_koff &lt;- 0.2</span></span>
+<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a><span class="co">#&gt;     veq_kon &lt;- 1e+06</span></span>
+<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a><span class="co">#&gt;     vcat_kcat &lt;- 0.1</span></span>
+<span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a><span class="co">#&gt;   })</span></span>
+<span id="cb16-14"><a href="#cb16-14" tabindex="-1"></a><span class="co">#&gt;   model({</span></span>
+<span id="cb16-15"><a href="#cb16-15" tabindex="-1"></a><span class="co">#&gt;     comp &lt;- 1e-14</span></span>
+<span id="cb16-16"><a href="#cb16-16" tabindex="-1"></a><span class="co">#&gt;     E(0) &lt;- 5e-07</span></span>
+<span id="cb16-17"><a href="#cb16-17" tabindex="-1"></a><span class="co">#&gt;     S(0) &lt;- 1e-06</span></span>
+<span id="cb16-18"><a href="#cb16-18" tabindex="-1"></a><span class="co">#&gt;     P(0) &lt;- 0</span></span>
+<span id="cb16-19"><a href="#cb16-19" tabindex="-1"></a><span class="co">#&gt;     ES(0) &lt;- 0</span></span>
+<span id="cb16-20"><a href="#cb16-20" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb16-21"><a href="#cb16-21" tabindex="-1"></a><span class="co">#&gt;     d/dt(E) &lt;- -1 * (comp * (veq_kon * E * S - veq_koff * ES) / comp) + comp * vcat_kcat * ES / comp</span></span>
+<span id="cb16-22"><a href="#cb16-22" tabindex="-1"></a><span class="co">#&gt;     d/dt(S) &lt;- -1 * (comp * (veq_kon * E * S - veq_koff * ES) / comp)</span></span>
+<span id="cb16-23"><a href="#cb16-23" tabindex="-1"></a><span class="co">#&gt;     d/dt(P) &lt;- comp * vcat_kcat * ES / comp</span></span>
+<span id="cb16-24"><a href="#cb16-24" tabindex="-1"></a><span class="co">#&gt;     d/dt(ES) &lt;- comp * (veq_kon * E * S - veq_koff * ES) / comp + -1 * (comp * vcat_kcat * ES / comp)</span></span>
+<span id="cb16-25"><a href="#cb16-25" tabindex="-1"></a><span class="co">#&gt;   })</span></span>
+<span id="cb16-26"><a href="#cb16-26" tabindex="-1"></a><span class="co">#&gt; }</span></span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>out_m <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">&quot;.m&quot;</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="fu">convertReactions</span>(sbml_file, out_m, <span class="at">format =</span> <span class="st">&quot;MATLAB&quot;</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a><span class="co">#&gt; Conversion completed.</span></span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a><span class="co">#&gt; Number of ODEs - 4</span></span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">readLines</span>(out_m), <span class="at">sep =</span> <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a><span class="co">#&gt; % Automatically generated MATLAB model file by r2sbml</span></span>
+<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a><span class="co">#&gt; %</span></span>
+<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a><span class="co">#&gt; % Save as file1b952307e6d.m, then solve with:  [t, y] = file1b952307e6d();</span></span>
+<span id="cb17-9"><a href="#cb17-9" tabindex="-1"></a><span class="co">#&gt; % Columns of y are, in order: E, S, P, ES</span></span>
+<span id="cb17-10"><a href="#cb17-10" tabindex="-1"></a><span class="co">#&gt; %</span></span>
+<span id="cb17-11"><a href="#cb17-11" tabindex="-1"></a><span class="co">#&gt; % Model Summary</span></span>
+<span id="cb17-12"><a href="#cb17-12" tabindex="-1"></a><span class="co">#&gt; %        compartments: 1</span></span>
+<span id="cb17-13"><a href="#cb17-13" tabindex="-1"></a><span class="co">#&gt; %             species: 4</span></span>
+<span id="cb17-14"><a href="#cb17-14" tabindex="-1"></a><span class="co">#&gt; %          parameters: 3</span></span>
+<span id="cb17-15"><a href="#cb17-15" tabindex="-1"></a><span class="co">#&gt; %               rules: 4</span></span>
+<span id="cb17-16"><a href="#cb17-16" tabindex="-1"></a><span class="co">#&gt; %              events: 0</span></span>
+<span id="cb17-17"><a href="#cb17-17" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb17-18"><a href="#cb17-18" tabindex="-1"></a><span class="co">#&gt; function [t, y] = file1b952307e6d(tspan, y0)</span></span>
+<span id="cb17-19"><a href="#cb17-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb17-20"><a href="#cb17-20" tabindex="-1"></a><span class="co">#&gt;     if nargin &lt; 1 || isempty(tspan)</span></span>
+<span id="cb17-21"><a href="#cb17-21" tabindex="-1"></a><span class="co">#&gt;         tspan = [0 10];</span></span>
+<span id="cb17-22"><a href="#cb17-22" tabindex="-1"></a><span class="co">#&gt;     end</span></span>
+<span id="cb17-23"><a href="#cb17-23" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb17-24"><a href="#cb17-24" tabindex="-1"></a><span class="co">#&gt;     % Compartments</span></span>
+<span id="cb17-25"><a href="#cb17-25" tabindex="-1"></a><span class="co">#&gt;     comp = 1e-14;</span></span>
+<span id="cb17-26"><a href="#cb17-26" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb17-27"><a href="#cb17-27" tabindex="-1"></a><span class="co">#&gt;     % Parameters</span></span>
+<span id="cb17-28"><a href="#cb17-28" tabindex="-1"></a><span class="co">#&gt;     veq_koff = 0.2;</span></span>
+<span id="cb17-29"><a href="#cb17-29" tabindex="-1"></a><span class="co">#&gt;     veq_kon = 1000000;</span></span>
+<span id="cb17-30"><a href="#cb17-30" tabindex="-1"></a><span class="co">#&gt;     vcat_kcat = 0.1;</span></span>
+<span id="cb17-31"><a href="#cb17-31" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb17-32"><a href="#cb17-32" tabindex="-1"></a><span class="co">#&gt;     % Initial amounts</span></span>
+<span id="cb17-33"><a href="#cb17-33" tabindex="-1"></a><span class="co">#&gt;     if nargin &lt; 2 || isempty(y0)</span></span>
+<span id="cb17-34"><a href="#cb17-34" tabindex="-1"></a><span class="co">#&gt;         y0 = [ ...</span></span>
+<span id="cb17-35"><a href="#cb17-35" tabindex="-1"></a><span class="co">#&gt;             5e-07; % E</span></span>
+<span id="cb17-36"><a href="#cb17-36" tabindex="-1"></a><span class="co">#&gt;             1e-06; % S</span></span>
+<span id="cb17-37"><a href="#cb17-37" tabindex="-1"></a><span class="co">#&gt;             0; % P</span></span>
+<span id="cb17-38"><a href="#cb17-38" tabindex="-1"></a><span class="co">#&gt;             0; % ES</span></span>
+<span id="cb17-39"><a href="#cb17-39" tabindex="-1"></a><span class="co">#&gt;         ];</span></span>
+<span id="cb17-40"><a href="#cb17-40" tabindex="-1"></a><span class="co">#&gt;     end</span></span>
+<span id="cb17-41"><a href="#cb17-41" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb17-42"><a href="#cb17-42" tabindex="-1"></a><span class="co">#&gt;     [t, y] = ode15s(@massBalances, tspan, y0);</span></span>
+<span id="cb17-43"><a href="#cb17-43" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb17-44"><a href="#cb17-44" tabindex="-1"></a><span class="co">#&gt;     function dydt = massBalances(time, states)</span></span>
+<span id="cb17-45"><a href="#cb17-45" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb17-46"><a href="#cb17-46" tabindex="-1"></a><span class="co">#&gt;         % States</span></span>
+<span id="cb17-47"><a href="#cb17-47" tabindex="-1"></a><span class="co">#&gt;         E = states(1);</span></span>
+<span id="cb17-48"><a href="#cb17-48" tabindex="-1"></a><span class="co">#&gt;         S = states(2);</span></span>
+<span id="cb17-49"><a href="#cb17-49" tabindex="-1"></a><span class="co">#&gt;         P = states(3);</span></span>
+<span id="cb17-50"><a href="#cb17-50" tabindex="-1"></a><span class="co">#&gt;         ES = states(4);</span></span>
+<span id="cb17-51"><a href="#cb17-51" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb17-52"><a href="#cb17-52" tabindex="-1"></a><span class="co">#&gt;         % Mass balances</span></span>
+<span id="cb17-53"><a href="#cb17-53" tabindex="-1"></a><span class="co">#&gt;         dydt = zeros(4, 1);</span></span>
+<span id="cb17-54"><a href="#cb17-54" tabindex="-1"></a><span class="co">#&gt;         dydt(1) = -1 * (comp * (veq_kon * E * S - veq_koff * ES) / comp) + comp * vcat_kcat * ES / comp; % E</span></span>
+<span id="cb17-55"><a href="#cb17-55" tabindex="-1"></a><span class="co">#&gt;         dydt(2) = -1 * (comp * (veq_kon * E * S - veq_koff * ES) / comp); % S</span></span>
+<span id="cb17-56"><a href="#cb17-56" tabindex="-1"></a><span class="co">#&gt;         dydt(3) = comp * vcat_kcat * ES / comp; % P</span></span>
+<span id="cb17-57"><a href="#cb17-57" tabindex="-1"></a><span class="co">#&gt;         dydt(4) = comp * (veq_kon * E * S - veq_koff * ES) / comp + -1 * (comp * vcat_kcat * ES / comp); % ES</span></span>
+<span id="cb17-58"><a href="#cb17-58" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb17-59"><a href="#cb17-59" tabindex="-1"></a><span class="co">#&gt;     end</span></span>
+<span id="cb17-60"><a href="#cb17-60" tabindex="-1"></a><span class="co">#&gt; end</span></span></code></pre></div>
+<p>MATLAB resolves a function by file name, so the generated function is
+named after the output path you gave. <strong>Renaming the
+<code>.m</code> file breaks it</strong> — regenerate instead of
+renaming.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a>out_jl <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">&quot;.jl&quot;</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a><span class="fu">convertReactions</span>(sbml_file, out_jl, <span class="at">format =</span> <span class="st">&quot;Julia&quot;</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a><span class="co">#&gt; Conversion completed.</span></span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a><span class="co">#&gt; Number of ODEs - 4</span></span>
+<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">readLines</span>(out_jl), <span class="at">sep =</span> <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a><span class="co">#&gt; # Automatically generated Julia model file by r2sbml</span></span>
+<span id="cb18-7"><a href="#cb18-7" tabindex="-1"></a><span class="co">#&gt; #</span></span>
+<span id="cb18-8"><a href="#cb18-8" tabindex="-1"></a><span class="co">#&gt; # Solve with:  using DifferentialEquations; sol = solve(prob)</span></span>
+<span id="cb18-9"><a href="#cb18-9" tabindex="-1"></a><span class="co">#&gt; # Elements of u are, in order: E, S, P, ES</span></span>
+<span id="cb18-10"><a href="#cb18-10" tabindex="-1"></a><span class="co">#&gt; #</span></span>
+<span id="cb18-11"><a href="#cb18-11" tabindex="-1"></a><span class="co">#&gt; # Model Summary</span></span>
+<span id="cb18-12"><a href="#cb18-12" tabindex="-1"></a><span class="co">#&gt; #        compartments: 1</span></span>
+<span id="cb18-13"><a href="#cb18-13" tabindex="-1"></a><span class="co">#&gt; #             species: 4</span></span>
+<span id="cb18-14"><a href="#cb18-14" tabindex="-1"></a><span class="co">#&gt; #          parameters: 3</span></span>
+<span id="cb18-15"><a href="#cb18-15" tabindex="-1"></a><span class="co">#&gt; #               rules: 4</span></span>
+<span id="cb18-16"><a href="#cb18-16" tabindex="-1"></a><span class="co">#&gt; #              events: 0</span></span>
+<span id="cb18-17"><a href="#cb18-17" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb18-18"><a href="#cb18-18" tabindex="-1"></a><span class="co">#&gt; using DifferentialEquations</span></span>
+<span id="cb18-19"><a href="#cb18-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb18-20"><a href="#cb18-20" tabindex="-1"></a><span class="co">#&gt; function massbalances!(du, u, p, t)</span></span>
+<span id="cb18-21"><a href="#cb18-21" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb18-22"><a href="#cb18-22" tabindex="-1"></a><span class="co">#&gt;     time = t</span></span>
+<span id="cb18-23"><a href="#cb18-23" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb18-24"><a href="#cb18-24" tabindex="-1"></a><span class="co">#&gt;     # Compartments</span></span>
+<span id="cb18-25"><a href="#cb18-25" tabindex="-1"></a><span class="co">#&gt;     comp = 1e-14</span></span>
+<span id="cb18-26"><a href="#cb18-26" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb18-27"><a href="#cb18-27" tabindex="-1"></a><span class="co">#&gt;     # Parameters</span></span>
+<span id="cb18-28"><a href="#cb18-28" tabindex="-1"></a><span class="co">#&gt;     veq_koff = p[1]</span></span>
+<span id="cb18-29"><a href="#cb18-29" tabindex="-1"></a><span class="co">#&gt;     veq_kon = p[2]</span></span>
+<span id="cb18-30"><a href="#cb18-30" tabindex="-1"></a><span class="co">#&gt;     vcat_kcat = p[3]</span></span>
+<span id="cb18-31"><a href="#cb18-31" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb18-32"><a href="#cb18-32" tabindex="-1"></a><span class="co">#&gt;     # States</span></span>
+<span id="cb18-33"><a href="#cb18-33" tabindex="-1"></a><span class="co">#&gt;     E = u[1]</span></span>
+<span id="cb18-34"><a href="#cb18-34" tabindex="-1"></a><span class="co">#&gt;     S = u[2]</span></span>
+<span id="cb18-35"><a href="#cb18-35" tabindex="-1"></a><span class="co">#&gt;     P = u[3]</span></span>
+<span id="cb18-36"><a href="#cb18-36" tabindex="-1"></a><span class="co">#&gt;     ES = u[4]</span></span>
+<span id="cb18-37"><a href="#cb18-37" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb18-38"><a href="#cb18-38" tabindex="-1"></a><span class="co">#&gt;     # Mass balances</span></span>
+<span id="cb18-39"><a href="#cb18-39" tabindex="-1"></a><span class="co">#&gt;     du[1] = -1 * (comp * (veq_kon * E * S - veq_koff * ES) / comp) + comp * vcat_kcat * ES / comp  # E</span></span>
+<span id="cb18-40"><a href="#cb18-40" tabindex="-1"></a><span class="co">#&gt;     du[2] = -1 * (comp * (veq_kon * E * S - veq_koff * ES) / comp)  # S</span></span>
+<span id="cb18-41"><a href="#cb18-41" tabindex="-1"></a><span class="co">#&gt;     du[3] = comp * vcat_kcat * ES / comp  # P</span></span>
+<span id="cb18-42"><a href="#cb18-42" tabindex="-1"></a><span class="co">#&gt;     du[4] = comp * (veq_kon * E * S - veq_koff * ES) / comp + -1 * (comp * vcat_kcat * ES / comp)  # ES</span></span>
+<span id="cb18-43"><a href="#cb18-43" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb18-44"><a href="#cb18-44" tabindex="-1"></a><span class="co">#&gt;     return nothing</span></span>
+<span id="cb18-45"><a href="#cb18-45" tabindex="-1"></a><span class="co">#&gt; end</span></span>
+<span id="cb18-46"><a href="#cb18-46" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb18-47"><a href="#cb18-47" tabindex="-1"></a><span class="co">#&gt; u0 = Float64[5e-07, 1e-06, 0, 0]</span></span>
+<span id="cb18-48"><a href="#cb18-48" tabindex="-1"></a><span class="co">#&gt; p = Float64[0.2, 1000000, 0.1]</span></span>
+<span id="cb18-49"><a href="#cb18-49" tabindex="-1"></a><span class="co">#&gt; tspan = (0.0, 10.0)</span></span>
+<span id="cb18-50"><a href="#cb18-50" tabindex="-1"></a><span class="co">#&gt; prob = ODEProblem(massbalances!, u0, tspan, p)</span></span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>out_ub <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">&quot;.txt&quot;</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a><span class="fu">convertReactions</span>(sbml_file, out_ub, <span class="at">format =</span> <span class="st">&quot;ubiquity&quot;</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a><span class="co">#&gt; Conversion completed.</span></span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a><span class="co">#&gt; Number of ODEs - 4</span></span>
+<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">readLines</span>(out_ub), <span class="at">sep =</span> <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a><span class="co">#&gt; # Automatically generated ubiquity system file by r2sbml</span></span>
+<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a><span class="co">#&gt; #</span></span>
+<span id="cb19-8"><a href="#cb19-8" tabindex="-1"></a><span class="co">#&gt; # Build with:  cfg &lt;- build_system(system_file = &quot;&lt;this file&gt;&quot;)</span></span>
+<span id="cb19-9"><a href="#cb19-9" tabindex="-1"></a><span class="co">#&gt; #</span></span>
+<span id="cb19-10"><a href="#cb19-10" tabindex="-1"></a><span class="co">#&gt; # Model Summary</span></span>
+<span id="cb19-11"><a href="#cb19-11" tabindex="-1"></a><span class="co">#&gt; #        compartments: 1</span></span>
+<span id="cb19-12"><a href="#cb19-12" tabindex="-1"></a><span class="co">#&gt; #             species: 4</span></span>
+<span id="cb19-13"><a href="#cb19-13" tabindex="-1"></a><span class="co">#&gt; #          parameters: 3</span></span>
+<span id="cb19-14"><a href="#cb19-14" tabindex="-1"></a><span class="co">#&gt; #               rules: 4</span></span>
+<span id="cb19-15"><a href="#cb19-15" tabindex="-1"></a><span class="co">#&gt; #              events: 0</span></span>
+<span id="cb19-16"><a href="#cb19-16" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb19-17"><a href="#cb19-17" tabindex="-1"></a><span class="co">#&gt; # Compartment volumes</span></span>
+<span id="cb19-18"><a href="#cb19-18" tabindex="-1"></a><span class="co">#&gt; &lt;P&gt; comp 1e-14 -inf inf litre yes System</span></span>
+<span id="cb19-19"><a href="#cb19-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb19-20"><a href="#cb19-20" tabindex="-1"></a><span class="co">#&gt; # Parameters</span></span>
+<span id="cb19-21"><a href="#cb19-21" tabindex="-1"></a><span class="co">#&gt; &lt;P&gt; veq_koff 0.2 -inf inf per_second yes System</span></span>
+<span id="cb19-22"><a href="#cb19-22" tabindex="-1"></a><span class="co">#&gt; &lt;P&gt; veq_kon 1000000 -inf inf litre_per_mole_second yes System</span></span>
+<span id="cb19-23"><a href="#cb19-23" tabindex="-1"></a><span class="co">#&gt; &lt;P&gt; vcat_kcat 0.1 -inf inf per_second yes System</span></span>
+<span id="cb19-24"><a href="#cb19-24" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb19-25"><a href="#cb19-25" tabindex="-1"></a><span class="co">#&gt; # Initial conditions</span></span>
+<span id="cb19-26"><a href="#cb19-26" tabindex="-1"></a><span class="co">#&gt; &lt;I&gt; E = 5e-07</span></span>
+<span id="cb19-27"><a href="#cb19-27" tabindex="-1"></a><span class="co">#&gt; &lt;I&gt; S = 1e-06</span></span>
+<span id="cb19-28"><a href="#cb19-28" tabindex="-1"></a><span class="co">#&gt; &lt;I&gt; P = 0</span></span>
+<span id="cb19-29"><a href="#cb19-29" tabindex="-1"></a><span class="co">#&gt; &lt;I&gt; ES = 0</span></span>
+<span id="cb19-30"><a href="#cb19-30" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb19-31"><a href="#cb19-31" tabindex="-1"></a><span class="co">#&gt; # Mass balances</span></span>
+<span id="cb19-32"><a href="#cb19-32" tabindex="-1"></a><span class="co">#&gt; &lt;ODE:E&gt; (((-1.0)*((comp*(((veq_kon*E)*S)-(veq_koff*ES)))/comp))+(((comp*vcat_kcat)*ES)/comp))</span></span>
+<span id="cb19-33"><a href="#cb19-33" tabindex="-1"></a><span class="co">#&gt; &lt;ODE:S&gt; ((-1.0)*((comp*(((veq_kon*E)*S)-(veq_koff*ES)))/comp))</span></span>
+<span id="cb19-34"><a href="#cb19-34" tabindex="-1"></a><span class="co">#&gt; &lt;ODE:P&gt; (((comp*vcat_kcat)*ES)/comp)</span></span>
+<span id="cb19-35"><a href="#cb19-35" tabindex="-1"></a><span class="co">#&gt; &lt;ODE:ES&gt; (((comp*(((veq_kon*E)*S)-(veq_koff*ES)))/comp)+((-1.0)*(((comp*vcat_kcat)*ES)/comp)))</span></span>
+<span id="cb19-36"><a href="#cb19-36" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb19-37"><a href="#cb19-37" tabindex="-1"></a><span class="co">#&gt; # Outputs</span></span>
+<span id="cb19-38"><a href="#cb19-38" tabindex="-1"></a><span class="co">#&gt; &lt;O&gt; E_out = E</span></span>
+<span id="cb19-39"><a href="#cb19-39" tabindex="-1"></a><span class="co">#&gt; &lt;O&gt; S_out = S</span></span>
+<span id="cb19-40"><a href="#cb19-40" tabindex="-1"></a><span class="co">#&gt; &lt;O&gt; P_out = P</span></span>
+<span id="cb19-41"><a href="#cb19-41" tabindex="-1"></a><span class="co">#&gt; &lt;O&gt; ES_out = ES</span></span></code></pre></div>
+<p>ubiquity has no compartment concept of its own, so a compartment
+volume becomes an ordinary <code>&lt;P&gt;</code> constant that the rate
+expressions divide by. It also spells exponentiation, the transcendental
+functions and every comparison as bracketed prefix calls —
+<code>SIMINT_POWER[a][b]</code>, <code>SIMINT_LOGN[a]</code>,
+<code>SIMINT_GT[a][b]</code> — which is why its output looks so
+different from the rest.</p>
+<p>Parameter bounds are written <code>-inf inf</code> rather than the
+<code>eps inf</code> you may have seen in hand-written ubiquity systems:
+an SBML value may legitimately be zero or negative, and a lower bound
+above the value would be inconsistent. They matter only for
+estimation.</p>
+</div>
+</div>
+<div id="model-features-that-change-the-shape-of-the-output" class="section level1">
+<h1>Model features that change the shape of the output</h1>
+<div id="assignment-rules" class="section level2">
+<h2>Assignment rules</h2>
+<p>A species driven by an assignment rule is not integrated. It is
+recomputed inside the right-hand side, before the derivatives that read
+it:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a>assign_file <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;examples&quot;</span>, <span class="st">&quot;sbmlassignmentrules.xml&quot;</span>, <span class="at">package =</span> <span class="st">&quot;r2sbml&quot;</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>out_assign  <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">&quot;.R&quot;</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a><span class="fu">convertReactions</span>(assign_file, out_assign, <span class="at">format =</span> <span class="st">&quot;R&quot;</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a><span class="co">#&gt; Conversion completed.</span></span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a><span class="co">#&gt; Number of ODEs - 5</span></span>
+<span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a>lines <span class="ot">&lt;-</span> <span class="fu">readLines</span>(out_assign)</span>
+<span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a><span class="fu">cat</span>(lines[<span class="fu">grep</span>(<span class="st">&quot;Assignment Rules&quot;</span>, lines)<span class="sc">:</span><span class="fu">length</span>(lines)], <span class="at">sep =</span> <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb20-9"><a href="#cb20-9" tabindex="-1"></a><span class="co">#&gt;    ## Assignment Rules</span></span>
+<span id="cb20-10"><a href="#cb20-10" tabindex="-1"></a><span class="co">#&gt;    S1 = T / (1 + Keq)</span></span>
+<span id="cb20-11"><a href="#cb20-11" tabindex="-1"></a><span class="co">#&gt;    S2 = Keq * S1</span></span>
+<span id="cb20-12"><a href="#cb20-12" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb20-13"><a href="#cb20-13" tabindex="-1"></a><span class="co">#&gt;    ## Mass Balances</span></span>
+<span id="cb20-14"><a href="#cb20-14" tabindex="-1"></a><span class="co">#&gt;    dX0_dt = -1 * (in_k1 * X0 * cell / cell)</span></span>
+<span id="cb20-15"><a href="#cb20-15" tabindex="-1"></a><span class="co">#&gt;    dX1_dt = out_k2 * S2 * cell / cell</span></span>
+<span id="cb20-16"><a href="#cb20-16" tabindex="-1"></a><span class="co">#&gt;    dT_dt = in_k1 * X0 * cell / cell + -1 * (out_k2 * S2 * cell / cell)</span></span>
+<span id="cb20-17"><a href="#cb20-17" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb20-18"><a href="#cb20-18" tabindex="-1"></a><span class="co">#&gt;    ## Make a list of Mass Balances</span></span>
+<span id="cb20-19"><a href="#cb20-19" tabindex="-1"></a><span class="co">#&gt;    MassBalances &lt;- c(</span></span>
+<span id="cb20-20"><a href="#cb20-20" tabindex="-1"></a><span class="co">#&gt;      dX0_dt ,</span></span>
+<span id="cb20-21"><a href="#cb20-21" tabindex="-1"></a><span class="co">#&gt;      dX1_dt ,</span></span>
+<span id="cb20-22"><a href="#cb20-22" tabindex="-1"></a><span class="co">#&gt;      dT_dt</span></span>
+<span id="cb20-23"><a href="#cb20-23" tabindex="-1"></a><span class="co">#&gt;    )</span></span>
+<span id="cb20-24"><a href="#cb20-24" tabindex="-1"></a><span class="co">#&gt;    return(list(MassBalances, c(S1 = S1, S2 = S2)))</span></span>
+<span id="cb20-25"><a href="#cb20-25" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb20-26"><a href="#cb20-26" tabindex="-1"></a><span class="co">#&gt; }</span></span></code></pre></div>
+<p><code>S1</code> and <code>S2</code> have no slot in the state vector
+and no derivative; they are locals. Giving them slots would leave the
+solver carrying copies that never update while the rules recompute
+different values beside them.</p>
+</div>
+<div id="algebraic-rules-make-the-model-a-dae" class="section level2">
+<h2>Algebraic rules make the model a DAE</h2>
+<p>An algebraic rule is a constraint, <code>0 = f(...)</code>, not a
+derivative. A rule that names a single undetermined variable and is
+linear in it is simply solved for that variable and written as an
+assignment rule, in every target. The rules in
+<code>sbmlalgebraicrules.xml</code> each name both <code>E</code> and
+<code>ES</code>, so they cannot be solved one at a time: the model is a
+differential-algebraic system, and where the target can solve one,
+<code>r2sbml</code> emits it.</p>
+<p>For deSolve that changes the shape of the generated function
+entirely: it becomes a <strong>residual</strong> function for
+<code>daspk</code> of <code>(time, states, derivs, params)</code>, not a
+derivative function for <code>ode</code>:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a>alg_file <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;examples&quot;</span>, <span class="st">&quot;sbmlalgebraicrules.xml&quot;</span>, <span class="at">package =</span> <span class="st">&quot;r2sbml&quot;</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>out_alg  <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">&quot;.R&quot;</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a><span class="fu">convertReactions</span>(alg_file, out_alg, <span class="at">format =</span> <span class="st">&quot;R&quot;</span>)</span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a><span class="co">#&gt; Conversion completed.</span></span>
+<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a><span class="co">#&gt; Number of ODEs - 4</span></span>
+<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a>lines <span class="ot">&lt;-</span> <span class="fu">readLines</span>(out_alg)</span>
+<span id="cb21-8"><a href="#cb21-8" tabindex="-1"></a><span class="fu">cat</span>(lines[<span class="fu">grep</span>(<span class="st">&quot;Residuals:&quot;</span>, lines)[<span class="dv">1</span>]<span class="sc">:</span>(<span class="fu">grep</span>(<span class="st">&quot;return</span><span class="sc">\\</span><span class="st">(list</span><span class="sc">\\</span><span class="st">(Residuals&quot;</span>, lines))], <span class="at">sep =</span> <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb21-9"><a href="#cb21-9" tabindex="-1"></a><span class="co">#&gt;    ## Residuals: 0 = d&lt;state&gt;/dt - f() for an integrated state,</span></span>
+<span id="cb21-10"><a href="#cb21-10" tabindex="-1"></a><span class="co">#&gt;    ##            0 = g()               for one fixed by an algebraic rule</span></span>
+<span id="cb21-11"><a href="#cb21-11" tabindex="-1"></a><span class="co">#&gt;    res_E = k1_on * E * S - (k1_off + k2) * ES  ## algebraic rule fixing E</span></span>
+<span id="cb21-12"><a href="#cb21-12" tabindex="-1"></a><span class="co">#&gt;    res_S = derivs[[&quot;S&quot;]] - (-1 * (cell * (k1_on * E * S - k1_off * ES) / cell))</span></span>
+<span id="cb21-13"><a href="#cb21-13" tabindex="-1"></a><span class="co">#&gt;    res_ES = E + ES - E_total  ## algebraic rule fixing ES</span></span>
+<span id="cb21-14"><a href="#cb21-14" tabindex="-1"></a><span class="co">#&gt;    res_P = derivs[[&quot;P&quot;]] - (cell * k2 * ES / cell)</span></span>
+<span id="cb21-15"><a href="#cb21-15" tabindex="-1"></a><span class="co">#&gt;    res_E_total = derivs[[&quot;E_total&quot;]]  ## E_total is constant</span></span>
+<span id="cb21-16"><a href="#cb21-16" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-17"><a href="#cb21-17" tabindex="-1"></a><span class="co">#&gt;    ## Make a list of Residuals</span></span>
+<span id="cb21-18"><a href="#cb21-18" tabindex="-1"></a><span class="co">#&gt;    Residuals &lt;- c(</span></span>
+<span id="cb21-19"><a href="#cb21-19" tabindex="-1"></a><span class="co">#&gt;      res_E ,</span></span>
+<span id="cb21-20"><a href="#cb21-20" tabindex="-1"></a><span class="co">#&gt;      res_S ,</span></span>
+<span id="cb21-21"><a href="#cb21-21" tabindex="-1"></a><span class="co">#&gt;      res_ES ,</span></span>
+<span id="cb21-22"><a href="#cb21-22" tabindex="-1"></a><span class="co">#&gt;      res_P ,</span></span>
+<span id="cb21-23"><a href="#cb21-23" tabindex="-1"></a><span class="co">#&gt;      res_E_total</span></span>
+<span id="cb21-24"><a href="#cb21-24" tabindex="-1"></a><span class="co">#&gt;    )</span></span>
+<span id="cb21-25"><a href="#cb21-25" tabindex="-1"></a><span class="co">#&gt;    return(list(Residuals))</span></span></code></pre></div>
+<p>The file also defines <code>InitialDerivatives</code>, because
+<code>daspk</code> needs <code>y&#39;</code> at <code>t = 0</code>
+consistent with the residuals:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>env <span class="ot">&lt;-</span> <span class="fu">new.env</span>()</span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a><span class="fu">source</span>(out_alg, <span class="at">local =</span> env)</span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a>sol <span class="ot">&lt;-</span> deSolve<span class="sc">::</span><span class="fu">daspk</span>(<span class="at">y     =</span> env<span class="sc">$</span>InitialAmounts,</span>
+<span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a>                      <span class="at">dy    =</span> env<span class="sc">$</span>InitialDerivatives,</span>
+<span id="cb22-6"><a href="#cb22-6" tabindex="-1"></a>                      <span class="at">times =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">10</span>, <span class="at">by =</span> <span class="dv">2</span>),</span>
+<span id="cb22-7"><a href="#cb22-7" tabindex="-1"></a>                      <span class="at">res   =</span> env<span class="sc">$</span>massBalances,</span>
+<span id="cb22-8"><a href="#cb22-8" tabindex="-1"></a>                      <span class="at">parms =</span> env<span class="sc">$</span>parameters)</span>
+<span id="cb22-9"><a href="#cb22-9" tabindex="-1"></a><span class="fu">round</span>(sol, <span class="dv">6</span>)</span>
+<span id="cb22-10"><a href="#cb22-10" tabindex="-1"></a><span class="co">#&gt;   time        E        S       ES        P E_total</span></span>
+<span id="cb22-11"><a href="#cb22-11" tabindex="-1"></a><span class="co">#&gt; 1    0 0.500000 1.000000 0.500000 0.000000       1</span></span>
+<span id="cb22-12"><a href="#cb22-12" tabindex="-1"></a><span class="co">#&gt; 2    2 0.638103 0.567146 0.361897 0.432854       1</span></span>
+<span id="cb22-13"><a href="#cb22-13" tabindex="-1"></a><span class="co">#&gt; 3    4 0.782187 0.278465 0.217813 0.721535       1</span></span>
+<span id="cb22-14"><a href="#cb22-14" tabindex="-1"></a><span class="co">#&gt; 4    6 0.892834 0.120029 0.107166 0.879971       1</span></span>
+<span id="cb22-15"><a href="#cb22-15" tabindex="-1"></a><span class="co">#&gt; 5    8 0.954673 0.047479 0.045327 0.952521       1</span></span>
+<span id="cb22-16"><a href="#cb22-16" tabindex="-1"></a><span class="co">#&gt; 6   10 0.982329 0.017989 0.017671 0.982011       1</span></span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(sol)</span>
+<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a><span class="co"># both algebraic rules hold along the whole trajectory</span></span>
+<span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a><span class="fu">max</span>(<span class="fu">abs</span>(d<span class="sc">$</span>E <span class="sc">+</span> d<span class="sc">$</span>ES <span class="sc">-</span> d<span class="sc">$</span>E_total))</span>
+<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a><span class="co">#&gt; [1] 1.511014e-13</span></span>
+<span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a><span class="fu">max</span>(<span class="fu">abs</span>(<span class="dv">1</span> <span class="sc">*</span> d<span class="sc">$</span>E <span class="sc">*</span> d<span class="sc">$</span>S <span class="sc">-</span> (<span class="fl">0.5</span> <span class="sc">+</span> <span class="fl">0.5</span>) <span class="sc">*</span> d<span class="sc">$</span>ES))</span>
+<span id="cb23-6"><a href="#cb23-6" tabindex="-1"></a><span class="co">#&gt; [1] 4.561434e-07</span></span></code></pre></div>
+<p>MATLAB and Julia keep the ordinary derivative shape and use a
+<strong>singular mass matrix</strong> instead: <code>M * y&#39; = f</code>,
+with a zero row wherever a constraint sits, so that row reads
+<code>0 = f_i</code>.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a>out_alg_m <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">&quot;.m&quot;</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a><span class="fu">convertReactions</span>(alg_file, out_alg_m, <span class="at">format =</span> <span class="st">&quot;MATLAB&quot;</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a><span class="co">#&gt; Conversion completed.</span></span>
+<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a><span class="co">#&gt; Number of ODEs - 4</span></span>
+<span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a>lines <span class="ot">&lt;-</span> <span class="fu">readLines</span>(out_alg_m)</span>
+<span id="cb24-6"><a href="#cb24-6" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">grep</span>(<span class="st">&quot;M = eye|M</span><span class="sc">\\</span><span class="st">(|MassSingular|ode15s&quot;</span>, lines, <span class="at">value =</span> <span class="cn">TRUE</span>), <span class="at">sep =</span> <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb24-7"><a href="#cb24-7" tabindex="-1"></a><span class="co">#&gt;     M = eye(5);</span></span>
+<span id="cb24-8"><a href="#cb24-8" tabindex="-1"></a><span class="co">#&gt;     M(1, 1) = 0; % E</span></span>
+<span id="cb24-9"><a href="#cb24-9" tabindex="-1"></a><span class="co">#&gt;     M(3, 3) = 0; % ES</span></span>
+<span id="cb24-10"><a href="#cb24-10" tabindex="-1"></a><span class="co">#&gt;     opts = odeset(&#39;Mass&#39;, M, &#39;MassSingular&#39;, &#39;yes&#39;);</span></span>
+<span id="cb24-11"><a href="#cb24-11" tabindex="-1"></a><span class="co">#&gt;     [t, y] = ode15s(@massBalances, tspan, y0, opts);</span></span></code></pre></div>
+<p>Julia needs both the mass matrix <em>and</em> a solver that accepts
+one, so the generated header names <code>Rodas5()</code> rather than a
+bare <code>solve(prob)</code>:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a>out_alg_jl <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">&quot;.jl&quot;</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a><span class="fu">convertReactions</span>(alg_file, out_alg_jl, <span class="at">format =</span> <span class="st">&quot;Julia&quot;</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a><span class="co">#&gt; Conversion completed.</span></span>
+<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a><span class="co">#&gt; Number of ODEs - 4</span></span>
+<span id="cb25-5"><a href="#cb25-5" tabindex="-1"></a>lines <span class="ot">&lt;-</span> <span class="fu">readLines</span>(out_alg_jl)</span>
+<span id="cb25-6"><a href="#cb25-6" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">grep</span>(<span class="st">&quot;Solve with|^M |^M</span><span class="sc">\\</span><span class="st">[|mass_matrix|ODEProblem&quot;</span>, lines, <span class="at">value =</span> <span class="cn">TRUE</span>), <span class="at">sep =</span> <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb25-7"><a href="#cb25-7" tabindex="-1"></a><span class="co">#&gt; # Solve with:  using DifferentialEquations; sol = solve(prob, Rodas5())</span></span>
+<span id="cb25-8"><a href="#cb25-8" tabindex="-1"></a><span class="co">#&gt; M = zeros(5, 5)</span></span>
+<span id="cb25-9"><a href="#cb25-9" tabindex="-1"></a><span class="co">#&gt; M[2, 2] = 1.0  # S</span></span>
+<span id="cb25-10"><a href="#cb25-10" tabindex="-1"></a><span class="co">#&gt; M[4, 4] = 1.0  # P</span></span>
+<span id="cb25-11"><a href="#cb25-11" tabindex="-1"></a><span class="co">#&gt; M[5, 5] = 1.0  # E_total</span></span>
+<span id="cb25-12"><a href="#cb25-12" tabindex="-1"></a><span class="co">#&gt; massbalances = ODEFunction(massbalances!; mass_matrix = M)</span></span>
+<span id="cb25-13"><a href="#cb25-13" tabindex="-1"></a><span class="co">#&gt; prob = ODEProblem(massbalances, u0, tspan, p)</span></span></code></pre></div>
+<p>mrgsolve, rxode2 and ubiquity integrate ODEs only. For those, a rule
+that could not be solved is written out as a comment and
+<code>convertReactions()</code> warns — see the limitations
+vignette.</p>
+</div>
+<div id="changing-compartment-volumes" class="section level2">
+<h2>Changing compartment volumes</h2>
+<p>If a compartment carries a rate rule, its volume is integrated
+alongside the species, and every species inside it picks up a dilution
+term. Since a species symbol is a concentration, <code>[S] = n/V</code>,
+the derivative is</p>
+<p><span class="math display">\[\frac{d[S]}{dt} \;=\;
+\frac{1}{V}\frac{dn}{dt} \;-\; \frac{[S]}{V}\frac{dV}{dt}\]</span></p>
+<p>and libSBML’s converter supplies only the first term.
+<code>r2sbml</code> adds the second.</p>
+<p>The example models all have constant compartments, so here is a small
+model written out by hand — a species sitting in a compartment that
+grows at a constant rate, with no reactions at all:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a>growing <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">&quot;.xml&quot;</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a><span class="fu">writeLines</span>(<span class="st">&#39;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;</span></span>
+<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a><span class="st">&lt;sbml xmlns=&quot;http://www.sbml.org/sbml/level3/version2/core&quot; level=&quot;3&quot; version=&quot;2&quot;&gt;</span></span>
+<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a><span class="st">&lt;model substanceUnits=&quot;mole&quot; volumeUnits=&quot;litre&quot; timeUnits=&quot;second&quot; extentUnits=&quot;mole&quot;&gt;</span></span>
+<span id="cb26-5"><a href="#cb26-5" tabindex="-1"></a><span class="st">&lt;listOfCompartments&gt;</span></span>
+<span id="cb26-6"><a href="#cb26-6" tabindex="-1"></a><span class="st">&lt;compartment id=&quot;c&quot; size=&quot;1&quot; spatialDimensions=&quot;3&quot; constant=&quot;false&quot;/&gt;</span></span>
+<span id="cb26-7"><a href="#cb26-7" tabindex="-1"></a><span class="st">&lt;/listOfCompartments&gt;</span></span>
+<span id="cb26-8"><a href="#cb26-8" tabindex="-1"></a><span class="st">&lt;listOfSpecies&gt;</span></span>
+<span id="cb26-9"><a href="#cb26-9" tabindex="-1"></a><span class="st">&lt;species id=&quot;A&quot; compartment=&quot;c&quot; initialConcentration=&quot;2&quot; boundaryCondition=&quot;false&quot;</span></span>
+<span id="cb26-10"><a href="#cb26-10" tabindex="-1"></a><span class="st">hasOnlySubstanceUnits=&quot;false&quot; constant=&quot;false&quot;/&gt;</span></span>
+<span id="cb26-11"><a href="#cb26-11" tabindex="-1"></a><span class="st">&lt;/listOfSpecies&gt;</span></span>
+<span id="cb26-12"><a href="#cb26-12" tabindex="-1"></a><span class="st">&lt;listOfParameters&gt;</span></span>
+<span id="cb26-13"><a href="#cb26-13" tabindex="-1"></a><span class="st">&lt;parameter id=&quot;g&quot; value=&quot;1&quot; constant=&quot;true&quot;/&gt;</span></span>
+<span id="cb26-14"><a href="#cb26-14" tabindex="-1"></a><span class="st">&lt;/listOfParameters&gt;</span></span>
+<span id="cb26-15"><a href="#cb26-15" tabindex="-1"></a><span class="st">&lt;listOfRules&gt;</span></span>
+<span id="cb26-16"><a href="#cb26-16" tabindex="-1"></a><span class="st">&lt;rateRule variable=&quot;c&quot;&gt;</span></span>
+<span id="cb26-17"><a href="#cb26-17" tabindex="-1"></a><span class="st">&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;ci&gt;g&lt;/ci&gt;&lt;/math&gt;</span></span>
+<span id="cb26-18"><a href="#cb26-18" tabindex="-1"></a><span class="st">&lt;/rateRule&gt;</span></span>
+<span id="cb26-19"><a href="#cb26-19" tabindex="-1"></a><span class="st">&lt;/listOfRules&gt;</span></span>
+<span id="cb26-20"><a href="#cb26-20" tabindex="-1"></a><span class="st">&lt;/model&gt;</span></span>
+<span id="cb26-21"><a href="#cb26-21" tabindex="-1"></a><span class="st">&lt;/sbml&gt;&#39;</span>, growing)</span>
+<span id="cb26-22"><a href="#cb26-22" tabindex="-1"></a></span>
+<span id="cb26-23"><a href="#cb26-23" tabindex="-1"></a>out_grow <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">&quot;.R&quot;</span>)</span>
+<span id="cb26-24"><a href="#cb26-24" tabindex="-1"></a><span class="fu">convertReactions</span>(growing, out_grow, <span class="at">format =</span> <span class="st">&quot;R&quot;</span>)</span>
+<span id="cb26-25"><a href="#cb26-25" tabindex="-1"></a><span class="co">#&gt; Conversion completed.</span></span>
+<span id="cb26-26"><a href="#cb26-26" tabindex="-1"></a><span class="co">#&gt; Number of ODEs - 1</span></span>
+<span id="cb26-27"><a href="#cb26-27" tabindex="-1"></a>lines <span class="ot">&lt;-</span> <span class="fu">readLines</span>(out_grow)</span>
+<span id="cb26-28"><a href="#cb26-28" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">grep</span>(<span class="st">&quot;InitialAmounts|^ +[Ac] =|_dt|states</span><span class="sc">\\</span><span class="st">[&quot;</span>, lines, <span class="at">value =</span> <span class="cn">TRUE</span>), <span class="at">sep =</span> <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb26-29"><a href="#cb26-29" tabindex="-1"></a><span class="co">#&gt; InitialAmounts &lt;- c(</span></span>
+<span id="cb26-30"><a href="#cb26-30" tabindex="-1"></a><span class="co">#&gt;          A = 2,</span></span>
+<span id="cb26-31"><a href="#cb26-31" tabindex="-1"></a><span class="co">#&gt;          c = 1   ## compartment volume, integrated</span></span>
+<span id="cb26-32"><a href="#cb26-32" tabindex="-1"></a><span class="co">#&gt;    A = states[[&quot;A&quot;]]</span></span>
+<span id="cb26-33"><a href="#cb26-33" tabindex="-1"></a><span class="co">#&gt;    c = states[[&quot;c&quot;]]</span></span>
+<span id="cb26-34"><a href="#cb26-34" tabindex="-1"></a><span class="co">#&gt;    dA_dt = -A * (g) / c  ## includes dilution by the changing volume</span></span>
+<span id="cb26-35"><a href="#cb26-35" tabindex="-1"></a><span class="co">#&gt;    dc_dt = g  ## compartment volume</span></span>
+<span id="cb26-36"><a href="#cb26-36" tabindex="-1"></a><span class="co">#&gt;      dA_dt ,</span></span>
+<span id="cb26-37"><a href="#cb26-37" tabindex="-1"></a><span class="co">#&gt;      dc_dt</span></span></code></pre></div>
+<p><code>c</code> is a state, not a constant, and <code>A</code> has a
+non-zero derivative despite taking part in no reaction — its
+concentration falls because its container is growing. The exact solution
+is <code>[A](t) = 2 / (1 + t)</code>, with the amount <code>A * c</code>
+fixed at 2:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a>env <span class="ot">&lt;-</span> <span class="fu">new.env</span>()</span>
+<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a><span class="fu">source</span>(out_grow, <span class="at">local =</span> env)</span>
+<span id="cb27-3"><a href="#cb27-3" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" tabindex="-1"></a>times <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">7</span>)</span>
+<span id="cb27-5"><a href="#cb27-5" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(deSolve<span class="sc">::</span><span class="fu">ode</span>(<span class="at">y =</span> env<span class="sc">$</span>InitialAmounts, <span class="at">times =</span> times,</span>
+<span id="cb27-6"><a href="#cb27-6" tabindex="-1"></a>                                <span class="at">func =</span> env<span class="sc">$</span>massBalances, <span class="at">parms =</span> env<span class="sc">$</span>parameters,</span>
+<span id="cb27-7"><a href="#cb27-7" tabindex="-1"></a>                                <span class="at">rtol =</span> <span class="fl">1e-10</span>, <span class="at">atol =</span> <span class="fl">1e-10</span>))</span>
+<span id="cb27-8"><a href="#cb27-8" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">time =</span> times, <span class="at">A =</span> d<span class="sc">$</span>A, <span class="at">exact =</span> <span class="dv">2</span> <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> times), <span class="at">amount =</span> d<span class="sc">$</span>A <span class="sc">*</span> d<span class="sc">$</span>c)</span>
+<span id="cb27-9"><a href="#cb27-9" tabindex="-1"></a><span class="co">#&gt;   time    A exact amount</span></span>
+<span id="cb27-10"><a href="#cb27-10" tabindex="-1"></a><span class="co">#&gt; 1    0 2.00  2.00      2</span></span>
+<span id="cb27-11"><a href="#cb27-11" tabindex="-1"></a><span class="co">#&gt; 2    1 1.00  1.00      2</span></span>
+<span id="cb27-12"><a href="#cb27-12" tabindex="-1"></a><span class="co">#&gt; 3    3 0.50  0.50      2</span></span>
+<span id="cb27-13"><a href="#cb27-13" tabindex="-1"></a><span class="co">#&gt; 4    7 0.25  0.25      2</span></span></code></pre></div>
+</div>
+</div>
+<div id="practical-notes" class="section level1">
+<h1>Practical notes</h1>
+<p><strong>Write to <code>tempfile()</code> in examples and
+tests.</strong> <code>convertReactions()</code> overwrites its output
+path without asking.</p>
+<p><strong>Expect console output.</strong>
+<code>convertReactions()</code> prints
+<code>Conversion completed.</code> and the number of ODEs;
+<code>getModel()</code> prints its header. Wrap calls in
+<code>invisible(capture.output(...))</code> if that noise is
+unwelcome.</p>
+<p><strong>Watch for warnings.</strong> Several model features cannot be
+expressed in every target. Where that is true,
+<code>convertReactions()</code> raises an R warning rather than silently
+emitting code that runs but computes the wrong thing. The next vignette
+lists every such case, and — just as importantly — the cases where no
+warning is raised.</p>
+</div>
+<div id="where-to-go-next" class="section level1">
+<h1>Where to go next</h1>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a><span class="fu">vignette</span>(<span class="st">&quot;limitations&quot;</span>, <span class="at">package =</span> <span class="st">&quot;r2sbml&quot;</span>)</span></code></pre></div>
+<p>covers what <code>r2sbml</code> does not do: unsupported SBML
+constructs, the per-target capability matrix, which limitations are
+announced and which are silent, and the known quirks of the query
+functions.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

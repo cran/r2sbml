@@ -1,0 +1,115 @@
+Package: r2sbml
+Type: Package
+Title: Read 'SBML' Models and Convert Them to Simulation Code
+Version: 0.1.0
+Authors@R: c(
+    person(given = "Satyaprakash", family = "Nayak",
+           role = c("aut", "cre", "cph"),
+           email = "satyaprakash.nayak@gmail.com"),
+    person(given = "Sarah M.", family = "Keating", role = "ctb",
+           comment = "Author of 'libSBML' and of the example code adapted in src/convertReactions.cpp and src/getMath.cpp"),
+    person(given = "Frank T.", family = "Bergmann", role = "ctb",
+           comment = "Author of 'libSBML' and of the example code adapted in src/convertReactions.cpp and src/getMath.cpp"),
+    person(given = "Lucian P.", family = "Smith", role = "ctb",
+           comment = "Author of 'libSBML'"),
+    person(given = "Brett G.", family = "Olivier", role = "ctb",
+           comment = "Author of 'libSBML'"),
+    person(given = "Akiya", family = "Jouraku", role = "ctb",
+           comment = "Author of 'libSBML'"),
+    person(given = "Michael", family = "Hucka", role = "ctb",
+           comment = "Author of 'libSBML'"),
+    person(given = "Ben", family = "Bornstein", role = "ctb",
+           comment = "Author of 'libSBML'"),
+    person(given = "Jeroen", family = "Ooms", role = "ctb",
+           comment = "Windows build support"),
+    person(given = "California Institute of Technology", role = "cph",
+           comment = "Copyright holder of 'libSBML', 2002-2020"),
+    person(given = "EMBL European Bioinformatics Institute", role = "cph",
+           comment = "Copyright holder of 'libSBML', 2009-2018"),
+    person(given = "University of Heidelberg", role = "cph",
+           comment = "Copyright holder of 'libSBML', 2013-2020"),
+    person(given = "University College London", role = "cph",
+           comment = "Copyright holder of 'libSBML', 2020"),
+    person(given = "Japan Science and Technology Agency", role = "cph",
+           comment = "Copyright holder of 'libSBML', 2002-2005"),
+    person(given = "Gilles", family = "Vollant", role = "cph",
+           comment = "Author of MiniZip, bundled with 'libSBML'"),
+    person(given = "Mathias", family = "Svensson", role = "cph",
+           comment = "Contributor to MiniZip, bundled with 'libSBML'"),
+    person(given = "Even", family = "Rouault", role = "cph",
+           comment = "Contributor to MiniZip, bundled with 'libSBML'"),
+    person(given = "Nathan", family = "Moinvaziri", role = "cph",
+           comment = "Contributor to MiniZip, bundled with 'libSBML'"),
+    person(given = "Terry", family = "Thorsen", role = "cph",
+           comment = "Contributor to MiniZip, bundled with 'libSBML'"),
+    person(given = "Info-ZIP", role = "cph",
+           comment = "Copyright holder of encryption code in MiniZip, bundled with 'libSBML'"),
+    person(given = "Ludwig", family = "Schwardt", role = "cph",
+           comment = "Author of the zlib iostream wrappers bundled with 'libSBML'"),
+    person(given = "Kevin", family = "Ruland", role = "cph",
+           comment = "Author of the zlib iostream wrappers bundled with 'libSBML'"),
+    person(given = "M. Petra", family = "Baranski", role = "cph",
+           comment = "Author of 'maddy', bundled with 'libSBML'"),
+    person(given = "Tim", family = "Gromeyer", role = "cph",
+           comment = "Author of 'html2md', bundled with 'libSBML'"))
+Description: Reads models in the Systems Biology Markup Language ('SBML')
+    (Hucka et al. (2003) <doi:10.1093/bioinformatics/btg015>) through the
+    bundled 'libSBML' library (Bornstein et al. (2008)
+    <doi:10.1093/bioinformatics/btn051>). Lists a model's species,
+    parameters, compartments, reactions, rules, events and function
+    definitions, and converts the model into ready-to-run simulation code
+    for 'deSolve', 'mrgsolve', 'rxode2', 'MATLAB', 'Julia' or 'ubiquity'.
+    Models are read, not modified.
+URL: https://sn248.github.io/r2sbml/, https://github.com/sn248/r2sbml
+BugReports: https://github.com/sn248/r2sbml/issues
+Encoding: UTF-8
+Language: en-GB
+License: GPL (>= 2)
+Copyright: See file inst/COPYRIGHTS
+Imports: Rcpp (>= 0.12.6)
+Suggests: deSolve, knitr, mrgsolve, rmarkdown, rxode2, testthat (>=
+        3.0.0), ubiquity
+VignetteBuilder: knitr
+LinkingTo: Rcpp
+Biarch: TRUE
+SystemRequirements: cmake, libxml2, libbz2
+Config/roxygen2/version: 8.1.1
+NeedsCompilation: yes
+Packaged: 2026-10-21 12:12:09 UTC; quantilogy
+Author: Satyaprakash Nayak [aut, cre, cph],
+  Sarah M. Keating [ctb] (Author of 'libSBML' and of the example code
+    adapted in src/convertReactions.cpp and src/getMath.cpp),
+  Frank T. Bergmann [ctb] (Author of 'libSBML' and of the example code
+    adapted in src/convertReactions.cpp and src/getMath.cpp),
+  Lucian P. Smith [ctb] (Author of 'libSBML'),
+  Brett G. Olivier [ctb] (Author of 'libSBML'),
+  Akiya Jouraku [ctb] (Author of 'libSBML'),
+  Michael Hucka [ctb] (Author of 'libSBML'),
+  Ben Bornstein [ctb] (Author of 'libSBML'),
+  Jeroen Ooms [ctb] (Windows build support),
+  California Institute of Technology [cph] (Copyright holder of
+    'libSBML', 2002-2020),
+  EMBL European Bioinformatics Institute [cph] (Copyright holder of
+    'libSBML', 2009-2018),
+  University of Heidelberg [cph] (Copyright holder of 'libSBML',
+    2013-2020),
+  University College London [cph] (Copyright holder of 'libSBML', 2020),
+  Japan Science and Technology Agency [cph] (Copyright holder of
+    'libSBML', 2002-2005),
+  Gilles Vollant [cph] (Author of MiniZip, bundled with 'libSBML'),
+  Mathias Svensson [cph] (Contributor to MiniZip, bundled with 'libSBML'),
+  Even Rouault [cph] (Contributor to MiniZip, bundled with 'libSBML'),
+  Nathan Moinvaziri [cph] (Contributor to MiniZip, bundled with
+    'libSBML'),
+  Terry Thorsen [cph] (Contributor to MiniZip, bundled with 'libSBML'),
+  Info-ZIP [cph] (Copyright holder of encryption code in MiniZip, bundled
+    with 'libSBML'),
+  Ludwig Schwardt [cph] (Author of the zlib iostream wrappers bundled
+    with 'libSBML'),
+  Kevin Ruland [cph] (Author of the zlib iostream wrappers bundled with
+    'libSBML'),
+  M. Petra Baranski [cph] (Author of 'maddy', bundled with 'libSBML'),
+  Tim Gromeyer [cph] (Author of 'html2md', bundled with 'libSBML')
+Maintainer: Satyaprakash Nayak <satyaprakash.nayak@gmail.com>
+Repository: CRAN
+Date/Publication: 2026-11-03 14:10:02 UTC
