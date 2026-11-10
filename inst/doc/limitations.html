@@ -800,11 +800,11 @@ trigger, delay and event assignment in the model. You can still inspect
 them from R:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">getEventMath</span>(<span class="fu">getModel</span>(<span class="fu">ex</span>(<span class="st">&quot;sbmlevent.xml&quot;</span>)))</span>
 <span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co">#&gt;   filename: /tmp/RtmpBPkfzA/Rinst1a8b63fe45a0f/r2sbml/examples/sbmlevent.xml</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co">#&gt;   filename: /tmp/Rtmpb82cex/Rinst1852b4c4c8769/r2sbml/examples/sbmlevent.xml</span></span>
 <span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co">#&gt;   error(s): 0</span></span>
 <span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co">#&gt; File: /tmp/RtmpBPkfzA/Rinst1a8b63fe45a0f/r2sbml/examples/sbmlevent.xml (Level 3, version 2)</span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co">#&gt; File: /tmp/Rtmpb82cex/Rinst1852b4c4c8769/r2sbml/examples/sbmlevent.xml (Level 3, version 2)</span></span>
 <span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="co">#&gt; Event 0 trigger: 1 * (P1 &gt; tau)</span></span>
 <span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a><span class="co">#&gt;   EventAssignment 1, trigger: G2 = 1</span></span>
 <span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="co">#&gt; Event 1 trigger: 1 * (P1 &lt;= tau)</span></span>
@@ -953,11 +953,11 @@ model actually sets — a species carries one or the other, never both —
 and names the result by species id:</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">getModel</span>(<span class="fu">ex</span>(<span class="st">&quot;sbmlsimple.xml&quot;</span>))</span>
 <span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="co">#&gt;   filename: /tmp/RtmpBPkfzA/Rinst1a8b63fe45a0f/r2sbml/examples/sbmlsimple.xml</span></span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="co">#&gt;   filename: /tmp/Rtmpb82cex/Rinst1852b4c4c8769/r2sbml/examples/sbmlsimple.xml</span></span>
 <span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co">#&gt;   error(s): 0</span></span>
 <span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="co">#&gt; File: /tmp/RtmpBPkfzA/Rinst1a8b63fe45a0f/r2sbml/examples/sbmlsimple.xml (Level 3, version 2)</span></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="co">#&gt; File: /tmp/Rtmpb82cex/Rinst1852b4c4c8769/r2sbml/examples/sbmlsimple.xml (Level 3, version 2)</span></span>
 <span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a><span class="fu">getSpeciesIC</span>(model)</span>
 <span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a><span class="co">#&gt;     E     S     P    ES </span></span>
 <span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a><span class="co">#&gt; 5e-21 1e-20 0e+00 0e+00</span></span></code></pre></div>

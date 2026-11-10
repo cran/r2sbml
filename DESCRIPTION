@@ -1,7 +1,7 @@
 Package: r2sbml
 Type: Package
 Title: Read 'SBML' Models and Convert Them to Simulation Code
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: c(
     person(given = "Satyaprakash", family = "Nayak",
            role = c("aut", "cre", "cph"),
@@ -72,10 +72,10 @@ Suggests: deSolve, knitr, mrgsolve, rmarkdown, rxode2, testthat (>=
 VignetteBuilder: knitr
 LinkingTo: Rcpp
 Biarch: TRUE
-SystemRequirements: cmake, libxml2, libbz2
+SystemRequirements: cmake, libxml2
 Config/roxygen2/version: 8.1.1
 NeedsCompilation: yes
-Packaged: 2026-10-21 12:12:09 UTC; quantilogy
+Packaged: 2026-11-09 21:27:42 UTC; quantilogy
 Author: Satyaprakash Nayak [aut, cre, cph],
   Sarah M. Keating [ctb] (Author of 'libSBML' and of the example code
     adapted in src/convertReactions.cpp and src/getMath.cpp),
@@ -112,4 +112,4 @@ Author: Satyaprakash Nayak [aut, cre, cph],
   Tim Gromeyer [cph] (Author of 'html2md', bundled with 'libSBML')
 Maintainer: Satyaprakash Nayak <satyaprakash.nayak@gmail.com>
 Repository: CRAN
-Date/Publication: 2026-11-03 14:10:02 UTC
+Date/Publication: 2026-11-10 08:50:02 UTC

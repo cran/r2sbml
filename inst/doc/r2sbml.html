@@ -415,11 +415,11 @@ pointer:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>sbml_file <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;examples&quot;</span>, <span class="st">&quot;sbmlsimple.xml&quot;</span>, <span class="at">package =</span> <span class="st">&quot;r2sbml&quot;</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">getModel</span>(sbml_file)</span>
 <span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt;   filename: /tmp/RtmpBPkfzA/Rinst1a8b63fe45a0f/r2sbml/examples/sbmlsimple.xml</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt;   filename: /tmp/Rtmpb82cex/Rinst1852b4c4c8769/r2sbml/examples/sbmlsimple.xml</span></span>
 <span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt;   error(s): 0</span></span>
 <span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt; File: /tmp/RtmpBPkfzA/Rinst1a8b63fe45a0f/r2sbml/examples/sbmlsimple.xml (Level 3, version 2)</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt; File: /tmp/Rtmpb82cex/Rinst1852b4c4c8769/r2sbml/examples/sbmlsimple.xml (Level 3, version 2)</span></span>
 <span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="fu">class</span>(model)</span>
 <span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt; [1] &quot;externalptr&quot;</span></span></code></pre></div>
 <p><code>getModel()</code> prints a short header as a side effect — the
@@ -517,11 +517,11 @@ capture them instead:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>rules_model <span class="ot">&lt;-</span> <span class="fu">getModel</span>(<span class="fu">system.file</span>(<span class="st">&quot;examples&quot;</span>, <span class="st">&quot;sbmlassignmentrules.xml&quot;</span>,</span>
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>                                    <span class="at">package =</span> <span class="st">&quot;r2sbml&quot;</span>))</span>
 <span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt;   filename: /tmp/RtmpBPkfzA/Rinst1a8b63fe45a0f/r2sbml/examples/sbmlassignmentrules.xml</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt;   filename: /tmp/Rtmpb82cex/Rinst1852b4c4c8769/r2sbml/examples/sbmlassignmentrules.xml</span></span>
 <span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt;   error(s): 0</span></span>
 <span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt; File: /tmp/RtmpBPkfzA/Rinst1a8b63fe45a0f/r2sbml/examples/sbmlassignmentrules.xml (Level 3, version 2)</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt; File: /tmp/Rtmpb82cex/Rinst1852b4c4c8769/r2sbml/examples/sbmlassignmentrules.xml (Level 3, version 2)</span></span>
 <span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="fu">getRuleMath</span>(rules_model)</span>
 <span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt; Rule 0, formula: S1 = T / (1 + Keq)</span></span>
 <span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&gt; Rule 1, formula: S2 = Keq * S1</span></span>
@@ -871,7 +871,7 @@ and does not compile for doubles, so powers are written
 <span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">readLines</span>(out_m), <span class="at">sep =</span> <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
 <span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a><span class="co">#&gt; % Automatically generated MATLAB model file by r2sbml</span></span>
 <span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a><span class="co">#&gt; %</span></span>
-<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a><span class="co">#&gt; % Save as file1b952307e6d.m, then solve with:  [t, y] = file1b952307e6d();</span></span>
+<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a><span class="co">#&gt; % Save as file1968778de5c8c.m, then solve with:  [t, y] = file1968778de5c8c();</span></span>
 <span id="cb17-9"><a href="#cb17-9" tabindex="-1"></a><span class="co">#&gt; % Columns of y are, in order: E, S, P, ES</span></span>
 <span id="cb17-10"><a href="#cb17-10" tabindex="-1"></a><span class="co">#&gt; %</span></span>
 <span id="cb17-11"><a href="#cb17-11" tabindex="-1"></a><span class="co">#&gt; % Model Summary</span></span>
@@ -881,7 +881,7 @@ and does not compile for doubles, so powers are written
 <span id="cb17-15"><a href="#cb17-15" tabindex="-1"></a><span class="co">#&gt; %               rules: 4</span></span>
 <span id="cb17-16"><a href="#cb17-16" tabindex="-1"></a><span class="co">#&gt; %              events: 0</span></span>
 <span id="cb17-17"><a href="#cb17-17" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb17-18"><a href="#cb17-18" tabindex="-1"></a><span class="co">#&gt; function [t, y] = file1b952307e6d(tspan, y0)</span></span>
+<span id="cb17-18"><a href="#cb17-18" tabindex="-1"></a><span class="co">#&gt; function [t, y] = file1968778de5c8c(tspan, y0)</span></span>
 <span id="cb17-19"><a href="#cb17-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb17-20"><a href="#cb17-20" tabindex="-1"></a><span class="co">#&gt;     if nargin &lt; 1 || isempty(tspan)</span></span>
 <span id="cb17-21"><a href="#cb17-21" tabindex="-1"></a><span class="co">#&gt;         tspan = [0 10];</span></span>

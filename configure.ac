@@ -22,7 +22,7 @@
 AC_PREREQ([2.69])
 
 # Process this file with autoconf to produce a configure script
-AC_INIT([r2sbml],[0.1.0])
+AC_INIT([r2sbml],[0.1.1])
 
 # Ensure C++ is set up as R expects
 : ${R_HOME=`R RHOME`}
@@ -35,7 +35,6 @@ if test -z "${CXX}"; then
 fi
 CXXFLAGS=`"${R_HOME}/bin/R" CMD config CXXFLAGS`
 CPPFLAGS=`"${R_HOME}/bin/R" CMD config CPPFLAGS`
-CXX11FLAGS=`"${R_HOME}/bin/R" CMD config CXX11FLAGS`
 AC_LANG(C++)
 AC_REQUIRE_CPP
 AC_PROG_CXX
@@ -65,10 +64,13 @@ if test x"${need_to_build}" != x"no"; then
     if test x"${have_cmake}" = x"no"; then
         . src/scripts/cmake_config.sh
     fi
-    tools/cmake_call.sh
+    tools/cmake_call.sh || AC_MSG_ERROR([Building libsbml failed; see the compiler output above.])
     SBML_ABS_SRC=$(cd src && pwd)
     SBML_INCLUDE="-I${SBML_ABS_SRC}/libsbml-install/include/ ${LIBXML2_CPPFLAGS}"
-    SBML_LIBS="-L${SBML_ABS_SRC}/libsbml-install/lib/ -lsbml-static -lxml2 -lbz2"
+    ## Link the archive by path, not -L/-l: R puts FLIBS (-L/usr/lib/x86_64-linux-gnu
+    ## among others) ahead of PKG_LIBS, so -lsbml-static found a system libsbml5-dev
+    ## archive first on CRAN's clang-san check (undefined unzGoToFirstFile).
+    SBML_LIBS="${SBML_ABS_SRC}/libsbml-install/lib/libsbml-static.a -lxml2"
 fi
 
 # Now substitute these variables in src/Makevars.in to create src/Makevars
